@@ -10,6 +10,7 @@ import '../../../domain/entities/sections/profile.dart';
 import '../../bloc/builder/builder_bloc.dart';
 import '../../bloc/builder/builder_event.dart';
 import '../../bloc/builder/builder_state.dart';
+import '../ai_rewrite_button.dart';
 
 /// Form for editing the profile section
 class ProfileForm extends StatefulWidget {
@@ -238,76 +239,94 @@ class _ProfileFormState extends State<ProfileForm> {
             : ResumeLanguage.english;
         final strings = ResumeStrings(lang);
 
-        return Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Avatar with image picker
-              Center(child: _buildAvatar()),
-              const SizedBox(height: 24),
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Avatar with image picker
+                Center(child: _buildAvatar()),
+                const SizedBox(height: 24),
 
-              // Full name
-              TextFormField(
-                controller: _fullNameController,
-                decoration: InputDecoration(
-                  labelText: strings.fullName,
-                  hintText: strings.hintFullName,
-                  prefixIcon: const Icon(Icons.person),
-                  border: const OutlineInputBorder(),
+                // Full name
+                TextFormField(
+                  controller: _fullNameController,
+                  decoration: InputDecoration(
+                    labelText: strings.fullName,
+                    hintText: strings.hintFullName,
+                    prefixIcon: const Icon(Icons.person),
+                    border: const OutlineInputBorder(),
+                  ),
+                  textCapitalization: TextCapitalization.words,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return strings.required;
+                    }
+                    return null;
+                  },
+                  onChanged: (_) => _saveProfile(),
                 ),
-                textCapitalization: TextCapitalization.words,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return strings.required;
-                  }
-                  return null;
-                },
-                onChanged: (_) => _saveProfile(),
-              ),
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-              // Job title
-              TextFormField(
-                controller: _jobTitleController,
-                decoration: InputDecoration(
-                  labelText: strings.jobTitle,
-                  hintText: strings.hintJobTitle,
-                  prefixIcon: const Icon(Icons.work),
-                  border: const OutlineInputBorder(),
+                // Job title
+                TextFormField(
+                  controller: _jobTitleController,
+                  decoration: InputDecoration(
+                    labelText: strings.jobTitle,
+                    hintText: strings.hintJobTitle,
+                    prefixIcon: const Icon(Icons.work),
+                    border: const OutlineInputBorder(),
+                  ),
+                  textCapitalization: TextCapitalization.words,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return strings.required;
+                    }
+                    return null;
+                  },
+                  onChanged: (_) => _saveProfile(),
                 ),
-                textCapitalization: TextCapitalization.words,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return strings.required;
-                  }
-                  return null;
-                },
-                onChanged: (_) => _saveProfile(),
-              ),
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-              // Summary
-              TextFormField(
-                controller: _summaryController,
-                decoration: InputDecoration(
-                  labelText: strings.summary,
-                  hintText: strings.hintSummary,
-                  prefixIcon: const Icon(Icons.description),
-                  border: const OutlineInputBorder(),
-                  alignLabelWithHint: true,
+                // Summary
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        strings.summary,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                    AiRewriteButton(
+                      controller: _summaryController,
+                      onRewritten: () => _saveProfile(),
+                    ),
+                  ],
                 ),
-                maxLines: 5,
-                maxLength: 500,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return strings.required;
-                  }
-                  return null;
-                },
-                onChanged: (_) => _saveProfile(),
-              ),
-            ],
+                const SizedBox(height: 4),
+                TextFormField(
+                  controller: _summaryController,
+                  decoration: InputDecoration(
+                    hintText: strings.hintSummary,
+                    prefixIcon: const Icon(Icons.description),
+                    border: const OutlineInputBorder(),
+                    alignLabelWithHint: true,
+                  ),
+                  maxLines: 5,
+                  maxLength: 500,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return strings.required;
+                    }
+                    return null;
+                  },
+                  onChanged: (_) => _saveProfile(),
+                ),
+              ],
+            ),
           ),
         );
       },

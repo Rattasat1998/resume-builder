@@ -7,6 +7,7 @@ import '../../../domain/entities/sections/experience.dart';
 import '../../bloc/builder/builder_bloc.dart';
 import '../../bloc/builder/builder_event.dart';
 import '../../bloc/builder/builder_state.dart';
+import '../ai_rewrite_button.dart';
 
 /// Form for editing the experience section
 class ExperienceForm extends StatelessWidget {
@@ -24,7 +25,9 @@ class ExperienceForm extends StatelessWidget {
         return false;
       },
       builder: (context, state) {
-        final lang = state is BuilderLoaded ? state.uiLanguage : ResumeLanguage.english;
+        final lang = state is BuilderLoaded
+            ? state.uiLanguage
+            : ResumeLanguage.english;
         final strings = ResumeStrings(lang);
 
         return Column(
@@ -59,7 +62,9 @@ class ExperienceForm extends StatelessWidget {
                   final orderedIds = experiences.map((e) => e.id).toList();
                   final id = orderedIds.removeAt(oldIndex);
                   orderedIds.insert(newIndex, id);
-                  context.read<BuilderBloc>().add(BuilderExperiencesReordered(orderedIds));
+                  context.read<BuilderBloc>().add(
+                    BuilderExperiencesReordered(orderedIds),
+                  );
                 },
                 itemBuilder: (context, index) {
                   final experience = experiences[index];
@@ -67,9 +72,12 @@ class ExperienceForm extends StatelessWidget {
                     key: ValueKey(experience.id),
                     experience: experience,
                     language: lang,
-                    onEdit: () => _showExperienceDialog(context, lang, experience),
+                    onEdit: () =>
+                        _showExperienceDialog(context, lang, experience),
                     onDelete: () {
-                      context.read<BuilderBloc>().add(BuilderExperienceRemoved(experience.id));
+                      context.read<BuilderBloc>().add(
+                        BuilderExperienceRemoved(experience.id),
+                      );
                     },
                   );
                 },
@@ -80,7 +88,11 @@ class ExperienceForm extends StatelessWidget {
     );
   }
 
-  void _showExperienceDialog(BuildContext context, ResumeLanguage language, [Experience? existing]) {
+  void _showExperienceDialog(
+    BuildContext context,
+    ResumeLanguage language, [
+    Experience? existing,
+  ]) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -90,7 +102,9 @@ class ExperienceForm extends StatelessWidget {
         language: language,
         onSave: (experience) {
           if (existing != null) {
-            context.read<BuilderBloc>().add(BuilderExperienceUpdated(experience));
+            context.read<BuilderBloc>().add(
+              BuilderExperienceUpdated(experience),
+            );
           } else {
             context.read<BuilderBloc>().add(BuilderExperienceAdded(experience));
           }
@@ -127,10 +141,7 @@ class _ExperienceCard extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: onEdit,
-            ),
+            IconButton(icon: const Icon(Icons.edit), onPressed: onEdit),
             IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),
               onPressed: () {
@@ -138,7 +149,9 @@ class _ExperienceCard extends StatelessWidget {
                   context: context,
                   builder: (ctx) => AlertDialog(
                     title: Text(strings.confirmDelete),
-                    content: Text(strings.deleteConfirmMessage(experience.position)),
+                    content: Text(
+                      strings.deleteConfirmMessage(experience.position),
+                    ),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(ctx),
@@ -149,7 +162,10 @@ class _ExperienceCard extends StatelessWidget {
                           Navigator.pop(ctx);
                           onDelete();
                         },
-                        child: Text(strings.delete, style: const TextStyle(color: Colors.red)),
+                        child: Text(
+                          strings.delete,
+                          style: const TextStyle(color: Colors.red),
+                        ),
                       ),
                     ],
                   ),
@@ -197,7 +213,9 @@ class _ExperienceEditSheetState extends State<_ExperienceEditSheet> {
     _companyController = TextEditingController(text: exp?.companyName ?? '');
     _positionController = TextEditingController(text: exp?.position ?? '');
     _locationController = TextEditingController(text: exp?.location ?? '');
-    _descriptionController = TextEditingController(text: exp?.description ?? '');
+    _descriptionController = TextEditingController(
+      text: exp?.description ?? '',
+    );
     _startDate = exp?.startDate ?? DateTime.now();
     _endDate = exp?.endDate;
     _isCurrentJob = exp?.isCurrentJob ?? false;
@@ -252,120 +270,145 @@ class _ExperienceEditSheetState extends State<_ExperienceEditSheet> {
   Widget build(BuildContext context) {
     final isEditing = widget.experience != null;
 
-    return Padding(
-      padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom,
-      ),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            shrinkWrap: true,
-            children: [
-              Text(
-                isEditing ? _strings.editExperience : _strings.addExperience,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 16),
-
-              TextFormField(
-                controller: _companyController,
-                decoration: InputDecoration(
-                  labelText: '${_strings.companyName} *',
-                  hintText: _strings.hintCompanyName,
-                  border: const OutlineInputBorder(),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                Text(
+                  isEditing ? _strings.editExperience : _strings.addExperience,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
-                validator: (v) => v?.trim().isEmpty ?? true ? _strings.required : null,
-              ),
-              const SizedBox(height: 12),
+                const SizedBox(height: 16),
 
-              TextFormField(
-                controller: _positionController,
-                decoration: InputDecoration(
-                  labelText: '${_strings.position} *',
-                  hintText: _strings.hintPosition,
-                  border: const OutlineInputBorder(),
-                ),
-                validator: (v) => v?.trim().isEmpty ?? true ? _strings.required : null,
-              ),
-              const SizedBox(height: 12),
-
-              TextFormField(
-                controller: _locationController,
-                decoration: InputDecoration(
-                  labelText: _strings.location,
-                  hintText: _strings.hintLocation,
-                  border: const OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => _selectDate(true),
-                      child: Text('${_strings.startDate}: ${_startDate.month}/${_startDate.year}'),
-                    ),
+                TextFormField(
+                  controller: _companyController,
+                  decoration: InputDecoration(
+                    labelText: '${_strings.companyName} *',
+                    hintText: _strings.hintCompanyName,
+                    border: const OutlineInputBorder(),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: _isCurrentJob ? null : () => _selectDate(false),
-                      child: Text(
-                        _isCurrentJob
-                            ? _strings.present
-                            : (_endDate != null
-                                ? '${_strings.endDate}: ${_endDate!.month}/${_endDate!.year}'
-                                : _strings.endDate),
+                  validator: (v) =>
+                      v?.trim().isEmpty ?? true ? _strings.required : null,
+                ),
+                const SizedBox(height: 12),
+
+                TextFormField(
+                  controller: _positionController,
+                  decoration: InputDecoration(
+                    labelText: '${_strings.position} *',
+                    hintText: _strings.hintPosition,
+                    border: const OutlineInputBorder(),
+                  ),
+                  validator: (v) =>
+                      v?.trim().isEmpty ?? true ? _strings.required : null,
+                ),
+                const SizedBox(height: 12),
+
+                TextFormField(
+                  controller: _locationController,
+                  decoration: InputDecoration(
+                    labelText: _strings.location,
+                    hintText: _strings.hintLocation,
+                    border: const OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => _selectDate(true),
+                        child: Text(
+                          '${_strings.startDate}: ${_startDate.month}/${_startDate.year}',
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-
-              CheckboxListTile(
-                value: _isCurrentJob,
-                onChanged: (v) => setState(() => _isCurrentJob = v ?? false),
-                title: Text(_strings.currentJob),
-                controlAffinity: ListTileControlAffinity.leading,
-                contentPadding: EdgeInsets.zero,
-              ),
-              const SizedBox(height: 12),
-
-              TextFormField(
-                controller: _descriptionController,
-                decoration: InputDecoration(
-                  labelText: _strings.description,
-                  hintText: _strings.hintDescription,
-                  border: const OutlineInputBorder(),
-                  alignLabelWithHint: true,
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: _isCurrentJob
+                            ? null
+                            : () => _selectDate(false),
+                        child: Text(
+                          _isCurrentJob
+                              ? _strings.present
+                              : (_endDate != null
+                                    ? '${_strings.endDate}: ${_endDate!.month}/${_endDate!.year}'
+                                    : _strings.endDate),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                maxLines: 4,
-              ),
-              const SizedBox(height: 24),
+                const SizedBox(height: 8),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(_strings.cancel),
+                CheckboxListTile(
+                  value: _isCurrentJob,
+                  onChanged: (v) => setState(() => _isCurrentJob = v ?? false),
+                  title: Text(_strings.currentJob),
+                  controlAffinity: ListTileControlAffinity.leading,
+                  contentPadding: EdgeInsets.zero,
+                ),
+                const SizedBox(height: 12),
+
+                // Description
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        _strings.description,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                    AiRewriteButton(
+                      controller: _descriptionController,
+                      onRewritten:
+                          () {}, // No direct save callback available here, but value is in controller
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                TextFormField(
+                  controller: _descriptionController,
+                  decoration: InputDecoration(
+                    hintText: _strings.hintDescription,
+                    border: const OutlineInputBorder(),
+                    alignLabelWithHint: true,
                   ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: _save,
-                    child: Text(_strings.save),
-                  ),
-                ],
-              ),
-            ],
+                  maxLines: 4,
+                ),
+                const SizedBox(height: 24),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(_strings.cancel),
+                    ),
+                    const SizedBox(width: 8),
+                    ElevatedButton(
+                      onPressed: _save,
+                      child: Text(_strings.save),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-

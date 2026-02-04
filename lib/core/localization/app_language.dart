@@ -217,4 +217,30 @@ class AppStrings {
   String get unlimited =>
       language == AppLanguage.thai ? 'ไม่จำกัด' : 'Unlimited';
   String get disabled => language == AppLanguage.thai ? 'ไม่ได้' : 'Disabled';
+
+  // Onboarding
+  String get onboardingTitle1 => language == AppLanguage.thai
+      ? 'สร้างเรซูเม่แบบมืออาชีพ'
+      : 'Create Professional Resumes';
+  String get onboardingDesc1 => language == AppLanguage.thai
+      ? 'สร้างเรื่องราวอาชีพของคุณ ทีละส่วน ในเวลาเพียงไม่กี่นาที'
+      : 'Build your career story, block by block, in just a few minutes.';
+
+  String get onboardingTitle2 => language == AppLanguage.thai
+      ? 'ผู้ช่วยเขียนอัจฉริยะ AI'
+      : 'AI-Powered Writing Assistant';
+  String get onboardingDesc2 => language == AppLanguage.thai
+      ? 'ใช้ AI ของเราช่วยขัดเกลาข้อความให้โดดเด่นและน่าสนใจ'
+      : 'Use our Gemini-powered AI to polish your text and make it shine.';
+
+  String get onboardingTitle3 => language == AppLanguage.thai
+      ? 'ส่งออก PDF & สมัครงาน'
+      : 'Export to PDF & Apply';
+  String get onboardingDesc3 => language == AppLanguage.thai
+      ? 'ส่งออกไฟล์ PDF คุณภาพสูงและสมัครงานในฝันได้ทันที'
+      : 'Export high-quality PDFs and apply to your dream jobs instantly.';
+
+  String get next => language == AppLanguage.thai ? 'ถัดไป' : 'Next';
+  String get getStarted =>
+      language == AppLanguage.thai ? 'เริ่มต้นใช้งาน' : 'Get Started';
 }

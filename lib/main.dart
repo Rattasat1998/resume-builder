@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'features/resume_builder/presentation/pages/cover_letter_page.dart';
+import 'features/onboarding/presentation/pages/onboarding_page.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
@@ -85,12 +88,16 @@ void main() async {
     subscriptionRepository: subscriptionRepository,
   );
 
+  // Check onboarding status
+  final showOnboarding = prefs.getBool('onboarding_complete') != true;
+
   runApp(
     MyApp(
       repository: repository,
       authRepository: authRepository,
       subscriptionRepository: subscriptionRepository,
       keyValueStore: keyValueStore,
+      showOnboarding: showOnboarding,
     ),
   );
 }
@@ -100,6 +107,7 @@ class MyApp extends StatelessWidget {
   final AuthRepository? authRepository;
   final SubscriptionRepository subscriptionRepository;
   final KeyValueStore keyValueStore;
+  final bool showOnboarding;
 
   const MyApp({
     super.key,
@@ -107,6 +115,7 @@ class MyApp extends StatelessWidget {
     this.authRepository,
     required this.subscriptionRepository,
     required this.keyValueStore,
+    required this.showOnboarding,
   });
 
   @override
@@ -175,7 +184,11 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          home: authRepository != null ? const AuthWrapper() : const HomePage(),
+          home: showOnboarding
+              ? const OnboardingPage()
+              : (authRepository != null
+                    ? const AuthWrapper()
+                    : const HomePage()),
           onGenerateRoute: _onGenerateRoute,
         ),
       ),
@@ -230,6 +243,11 @@ class MyApp extends StatelessWidget {
             currentTemplate: args['template'],
             onTemplateChanged: args['onChanged'],
           ),
+        );
+      case '/cover-letter':
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) => CoverLetterPage(resumeData: args),
         );
       case '/paywall':
         return MaterialPageRoute(
@@ -332,24 +350,52 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<void> _refreshData() async {
+    // 1. Trigger Subscription Check
+    context.read<SubscriptionBloc>().add(const SubscriptionInitialized());
+
+    // 2. Load Drafts
+    await _loadDrafts();
+  }
+
   Future<void> _loadDrafts() async {
-    setState(() => _isLoading = true);
+    // Only show loading indicator if it's the initial load or explicit reload,
+    // but RefreshIndicator handles its own spinner.
+    // If called from RefreshIndicator, we might not want to set _isLoading = true
+    // because it completely rebuilds the UI instead of showing the pull-to-refresh spinner.
+    // However, existing logic sets it. Let's keep it consistent or improve it.
+
+    // Check if we are already loading to avoid double indicators if possible,
+    // but for now let's just stick to the request.
+
+    // Actually, for pull-to-refresh, we usually don't want to wipe the screen content
+    // with _isLoading = true. But the current implementation does:
+    // setState(() => _isLoading = true);
+
+    // Let's modify _loadDrafts to optionally specific if it should show full screen loader.
+    // But to minimize risk, I will just create _refreshData and use it in RefreshIndicator.
+    // And I will NOT set _isLoading = true inside _loadDrafts if it's a refresh.
+    // A better approach is to separate the fetching logic.
 
     final repository = context.read<ResumeBuilderRepository>();
     final result = await LoadAllDrafts(repository).call();
 
     result.fold(
       onSuccess: (drafts) {
-        setState(() {
-          _drafts = drafts;
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _drafts = drafts;
+            _isLoading = false;
+          });
+        }
       },
       onFailure: (failure) {
-        setState(() {
-          _drafts = [];
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _drafts = [];
+            _isLoading = false;
+          });
+        }
       },
     );
   }
@@ -365,7 +411,7 @@ class _HomePageState extends State<HomePage> {
 
         return Scaffold(
           body: RefreshIndicator(
-            onRefresh: _loadDrafts,
+            onRefresh: _refreshData,
             child: CustomScrollView(
               slivers: [
                 BlocBuilder<SubscriptionBloc, SubscriptionState>(
@@ -938,6 +984,19 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   PopupMenuItem(
+                    value: 'cover_letter',
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.auto_awesome,
+                          color: Colors.deepPurple,
+                        ),
+                        const SizedBox(width: 8),
+                        const Text('Smart Cover Letter'),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
                     value: 'duplicate',
                     child: Row(
                       children: [
@@ -1096,6 +1155,46 @@ class _HomePageState extends State<HomePage> {
     switch (action) {
       case 'edit':
         _openDraft(draft.id);
+        break;
+      case 'cover_letter':
+        final resumeData = {
+          'profile': {
+            'fullName': draft.profile.fullName,
+            'jobTitle': draft.profile.jobTitle,
+            'email': draft.contact.email,
+            'phone': draft.contact.phone,
+            'address': draft.contact.address,
+            'linkedIn': draft.contact.linkedIn,
+            'website': draft.contact.website,
+            'summary': draft.profile.summary,
+          },
+          'experiences': draft.experiences
+              .map(
+                (e) => {
+                  'company': e.companyName,
+                  'position': e.position,
+                  'description': e.description,
+                  'startDate': e.startDate.toIso8601String(),
+                  'endDate': e.endDate?.toIso8601String(),
+                  'isCurrentJob': e.isCurrentJob,
+                },
+              )
+              .toList(),
+          'educations': draft.educations
+              .map(
+                (e) => {
+                  'school': e.institution,
+                  'degree': e.degree,
+                  'fieldOfStudy': e.fieldOfStudy,
+                  'description': e.description,
+                  'startDate': e.startDate.toIso8601String(),
+                  'endDate': e.endDate?.toIso8601String(),
+                },
+              )
+              .toList(),
+          'skills': draft.skills.map((e) => e.name).toList(),
+        };
+        Navigator.pushNamed(context, '/cover-letter', arguments: resumeData);
         break;
       case 'duplicate':
         // TODO: Implement duplicate
