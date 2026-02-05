@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Resume Builder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #e94560;
+            text-decoration: none;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 40px;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+        }
+
+        .card h2 {
+            color: #e94560;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .card a {
+            color: #e94560;
+            text-decoration: none;
+        }
+
+        .card a:hover {
+            text-decoration: underline;
+        }
+
+        .email-btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #e94560, #ff6b6b);
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .email-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.4);
+            text-decoration: none;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-item h3 {
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .faq-item p {
+            color: #aaa;
+            margin-bottom: 0;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Home</a>
+
+        <h1>💬 Support</h1>
+        <p class="subtitle">We're here to help!</p>
+
+        <div class="content">
+            <div class="card">
+                <h2>📧 Contact Us</h2>
+                <p>Have questions, feedback, or need assistance? Send us an email and we'll get back to you within 24-48
+                    hours.</p>
+                <a href="mailto:support@resumebuilder.app" class="email-btn">Email Support</a>
+            </div>
+
+            <div class="card">
+                <h2>🗑️ Account & Data Deletion</h2>
+                <p>To request deletion of your account and all associated data, please email us at <a
+                        href="mailto:support@resumebuilder.app">support@resumebuilder.app</a> with the subject line
+                    "Account Deletion Request".</p>
+                <p>Please include the email address associated with your account. We will process your request within 30
+                    days.</p>
+            </div>
+
+            <div class="card">
+                <h2>❓ Frequently Asked Questions</h2>
+
+                <div class="faq-item">
+                    <h3>How do I cancel my subscription?</h3>
+                    <p>Subscriptions can be cancelled through your device settings. On iOS, go to Settings → Apple ID →
+                        Subscriptions. On Android, go to Google Play Store → Menu → Subscriptions.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>How do I export my resume?</h3>
+                    <p>Open your resume in the app and tap the "Export" or "Share" button. You can save it as a PDF or
+                        share it directly to other apps.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Can I use the app on multiple devices?</h3>
+                    <p>Yes! Sign in with the same Google account on all your devices, and your resumes will sync
+                        automatically.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>How do I restore my purchases?</h3>
+                    <p>Go to the app settings and tap "Restore Purchases". Make sure you're signed in with the same
+                        Apple ID or Google account used for the original purchase.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3>Is my data secure?</h3>
+                    <p>Yes! We use industry-standard encryption and secure cloud storage. Your resume data is protected
+                        and only accessible by you. Read our <a href="privacy-policy.html">Privacy Policy</a> for more
+                        details.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2026 Resume Builder. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>

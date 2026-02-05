@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'features/resume_builder/presentation/pages/cover_letter_page.dart';
 import 'features/onboarding/presentation/pages/onboarding_page.dart';
+import 'features/dashboard/presentation/pages/menu_dashboard_page.dart';
+import 'features/interview_coach/presentation/pages/interview_coach_page.dart';
+import 'features/interview_coach/presentation/pages/salary_estimator_page.dart';
+import 'features/dream_roadmap/presentation/pages/dream_job_roadmap_page.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,9 +21,7 @@ import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/auth/domain/entities/app_user.dart';
 import 'features/auth/presentation/bloc/auth_state.dart';
-import 'features/auth/presentation/pages/forgot_password_page.dart';
 import 'features/auth/presentation/pages/login_page.dart';
-import 'features/auth/presentation/pages/register_page.dart';
 import 'features/resume_builder/data/datasources/resume_local_ds.dart';
 import 'features/resume_builder/data/datasources/resume_remote_ds.dart';
 import 'features/resume_builder/data/repositories/resume_builder_repository_impl.dart';
@@ -146,50 +148,53 @@ class MyApp extends StatelessWidget {
             value: subscriptionRepository,
           ),
         ],
-        child: MaterialApp(
-          title: 'Resume Builder',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: const Color(0xFF2563EB),
-              brightness: Brightness.light,
-            ),
-            useMaterial3: true,
-            inputDecorationTheme: InputDecorationTheme(
-              filled: true,
-              fillColor: Colors.grey.shade50,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
+        child: GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: MaterialApp(
+            title: 'Resume Builder',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF2563EB),
+                brightness: Brightness.light,
               ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 14,
-              ),
-            ),
-            cardTheme: CardThemeData(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
+              useMaterial3: true,
+              inputDecorationTheme: InputDecorationTheme(
+                filled: true,
+                fillColor: Colors.grey.shade50,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
+              ),
+              cardTheme: CardThemeData(
+                elevation: 2,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                 ),
               ),
             ),
+            home: showOnboarding
+                ? const OnboardingPage()
+                : (authRepository != null
+                      ? const AuthWrapper()
+                      : const MenuDashboardPage()),
+            onGenerateRoute: _onGenerateRoute,
           ),
-          home: showOnboarding
-              ? const OnboardingPage()
-              : (authRepository != null
-                    ? const AuthWrapper()
-                    : const HomePage()),
-          onGenerateRoute: _onGenerateRoute,
         ),
       ),
     );
@@ -199,14 +204,12 @@ class MyApp extends StatelessWidget {
     switch (settings.name) {
       case '/login':
         return MaterialPageRoute(builder: (context) => const LoginPage());
-      case '/register':
-        return MaterialPageRoute(builder: (context) => const RegisterPage());
-      case '/forgot-password':
-        return MaterialPageRoute(
-          builder: (context) => const ForgotPasswordPage(),
-        );
       case '/home':
-        return MaterialPageRoute(builder: (context) => const HomePage());
+        return MaterialPageRoute(
+          builder: (context) => const MenuDashboardPage(),
+        );
+      case '/my-resumes':
+        return MaterialPageRoute(builder: (context) => const MyResumesPage());
       case '/builder':
         final draftId = settings.arguments as String?;
         return MaterialPageRoute(
@@ -245,9 +248,9 @@ class MyApp extends StatelessWidget {
           ),
         );
       case '/cover-letter':
-        final args = settings.arguments as Map<String, dynamic>;
+        final args = settings.arguments as Map<String, dynamic>?;
         return MaterialPageRoute(
-          builder: (context) => CoverLetterPage(resumeData: args),
+          builder: (context) => CoverLetterPage(resumeData: args ?? {}),
         );
       case '/paywall':
         return MaterialPageRoute(
@@ -257,6 +260,18 @@ class MyApp extends StatelessWidget {
       case '/subscription-details':
         return MaterialPageRoute(
           builder: (context) => const SubscriptionDetailsPage(),
+        );
+      case '/interview-coach':
+        return MaterialPageRoute(
+          builder: (context) => const InterviewCoachPage(),
+        );
+      case '/salary-estimator':
+        return MaterialPageRoute(
+          builder: (context) => const SalaryEstimatorPage(),
+        );
+      case '/dream-roadmap':
+        return MaterialPageRoute(
+          builder: (context) => const DreamJobRoadmapPage(),
         );
       default:
         return null;
@@ -304,25 +319,25 @@ class AuthWrapper extends StatelessWidget {
               body: Center(child: CircularProgressIndicator()),
             );
           case AuthStatus.authenticated:
-            return const HomePage();
+            return const MenuDashboardPage();
           case AuthStatus.unauthenticated:
           case AuthStatus.loading:
-            return const HomePage();
+            return const MenuDashboardPage();
         }
       },
     );
   }
 }
 
-/// Home page showing list of drafts and create new option
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+/// Page showing list of resumes (formerly HomePage)
+class MyResumesPage extends StatefulWidget {
+  const MyResumesPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MyResumesPage> createState() => _MyResumesPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _MyResumesPageState extends State<MyResumesPage> {
   List<ResumeDraft>? _drafts;
   bool _isLoading = true;
 
@@ -330,24 +345,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadDrafts();
-    _checkSubscriptionAndShowPaywall();
-  }
-
-  void _checkSubscriptionAndShowPaywall() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Delay slightly to let the UI settle
-      await Future.delayed(const Duration(milliseconds: 500));
-      if (!mounted) return;
-
-      final subscriptionBloc = context.read<SubscriptionBloc>();
-      final state = subscriptionBloc.state;
-
-      // If we know the user is free, show paywall
-      if (state.status == SubscriptionStatus.loaded &&
-          state.userPlan == UserPlan.free) {
-        Navigator.of(context).pushNamed('/paywall');
-      }
-    });
   }
 
   Future<void> _refreshData() async {
@@ -421,14 +418,11 @@ class _HomePageState extends State<HomePage> {
                         subState.userPlan != UserPlan.free;
 
                     return SliverAppBar(
-                      expandedHeight: isAuthenticated && user != null
-                          ? 280.0
-                          : kToolbarHeight,
                       pinned: true,
                       backgroundColor: Theme.of(context).primaryColor,
                       foregroundColor: Colors.white,
                       title: Text(
-                        strings.appTitle,
+                        strings.menuMyResumes,
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -446,25 +440,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             tooltip: 'Upgrade to Pro',
                           ),
-                        _buildLanguageSwitcher(
-                          context,
-                          appLanguage,
-                          isDarkBackground: true,
-                        ),
-                        const SizedBox(width: 8),
-                        if (authBloc != null)
-                          _buildUserMenu(
-                            context,
-                            isAuthenticated,
-                            strings,
-                            isDarkBackground: true,
-                          ),
                       ],
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: isAuthenticated && user != null
-                            ? _buildProfileFlexibleSpace(user, strings)
-                            : null,
-                      ),
                     );
                   },
                 ),

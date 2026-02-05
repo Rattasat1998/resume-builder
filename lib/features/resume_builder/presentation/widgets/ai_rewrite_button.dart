@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../subscription/domain/entities/user_plan.dart';
+import '../../../subscription/presentation/bloc/subscription_bloc.dart';
 import '../../../../core/services/ai_service.dart';
 
 class AiRewriteButton extends StatefulWidget {
@@ -28,6 +31,13 @@ class _AiRewriteButtonState extends State<AiRewriteButton> {
       return;
     }
 
+    // Check Subscription
+    final subscriptionState = context.read<SubscriptionBloc>().state;
+    if (subscriptionState.userPlan == UserPlan.free) {
+      Navigator.of(context).pushNamed('/paywall');
+      return;
+    }
+
     setState(() {
       _isLoading = true;
     });
@@ -43,7 +53,10 @@ class _AiRewriteButtonState extends State<AiRewriteButton> {
               children: [
                 Icon(Icons.auto_awesome, color: Colors.purple),
                 SizedBox(width: 8),
-                Text('AI Rewrite Suggestion', style: TextStyle(color: Colors.purple,fontSize: 16)),
+                Text(
+                  'AI Rewrite Suggestion',
+                  style: TextStyle(color: Colors.purple, fontSize: 16),
+                ),
               ],
             ),
             content: Column(
@@ -88,9 +101,20 @@ class _AiRewriteButtonState extends State<AiRewriteButton> {
       }
     } catch (e) {
       if (mounted) {
+        String errorMessage = 'Failed to rewrite: $e';
+        if (e.toString().contains('400') ||
+            e.toString().toLowerCase().contains('quota') ||
+            e.toString().toLowerCase().contains('resource exhausted')) {
+          errorMessage =
+              'AI Service is busy (Quota Exceeded). Please try again later.';
+        } else if (e.toString().toLowerCase().contains('gemini error')) {
+          errorMessage =
+              'AI Error: ${e.toString().split('Gemini Error:').last.trim()}';
+        }
+
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Failed to rewrite: $e')));
+        ).showSnackBar(SnackBar(content: Text(errorMessage)));
       }
     } finally {
       if (mounted) {

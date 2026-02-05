@@ -9,10 +9,19 @@ import '../../domain/entities/user_plan.dart';
 import '../../domain/repositories/subscription_repository.dart';
 
 class RevenueCatRepositoryImpl implements SubscriptionRepository {
-  // TODO: Replace with your actual Android API Key
-  static const _androidApiKey = 'test_MnIQzcirBXJPGIRhVjfcCBHFQyk';
-  static const _iosApiKey =
-      'test_MnIQzcirBXJPGIRhVjfcCBHFQyk'; // TODO: Replace with your actual iOS API Key
+  // --- Configuration ---
+  // 1. Debug/Test Keys (from your 'Test' project in RevenueCat)
+  static const _androidDebugKey = 'test_MnIQzcirBXJPGIRhVjfcCBHFQyk';
+  static const _iosDebugKey = 'test_MnIQzcirBXJPGIRhVjfcCBHFQyk';
+
+  // 2. Production Keys (from your 'Live' project in RevenueCat)
+  // TODO: Replace these with your actual standard RevenueCat API keys (usually start with 'goog_' or 'appl_')
+  static const _androidProdKey = 'goog_yTpTkYkDVxIIurCJGaSiMGPnYaM';
+  static const _iosProdKey = 'goog_yTpTkYkDVxIIurCJGaSiMGPnYaM';
+
+  // Logic to select key based on environment
+  String get _androidKey => kDebugMode ? _androidDebugKey : _androidProdKey;
+  String get _iosKey => kDebugMode ? _iosDebugKey : _iosProdKey;
 
   bool _isInitialized = false;
   final _planController = StreamController<UserPlan>.broadcast();
@@ -25,12 +34,12 @@ class RevenueCatRepositoryImpl implements SubscriptionRepository {
     if (_isInitialized) return;
 
     if (Platform.isAndroid) {
-      await Purchases.setLogLevel(LogLevel.debug);
-      await Purchases.configure(PurchasesConfiguration(_androidApiKey));
+      await Purchases.setLogLevel(kDebugMode ? LogLevel.debug : LogLevel.info);
+      await Purchases.configure(PurchasesConfiguration(_androidKey));
       _isInitialized = true;
     } else if (Platform.isIOS) {
-      await Purchases.setLogLevel(LogLevel.debug);
-      await Purchases.configure(PurchasesConfiguration(_iosApiKey));
+      await Purchases.setLogLevel(kDebugMode ? LogLevel.debug : LogLevel.info);
+      await Purchases.configure(PurchasesConfiguration(_iosKey));
       _isInitialized = true;
     }
 

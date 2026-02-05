@@ -38,7 +38,7 @@ class AppStrings {
 
   // App Title
   String get appTitle =>
-      language == AppLanguage.thai ? 'เรซูเม่ของฉัน' : 'My Resume';
+      language == AppLanguage.thai ? 'เรซูเม่ดี' : 'ResumeDee';
 
   // Home Page
   String get noResumesYet =>
@@ -85,6 +85,7 @@ class AppStrings {
       : 'Are you sure you want to delete "$title"? This action cannot be undone.';
 
   String get cancel => language == AppLanguage.thai ? 'ยกเลิก' : 'Cancel';
+  String get confirm => language == AppLanguage.thai ? 'ยืนยัน' : 'Confirm';
 
   // Settings
   String get settings => language == AppLanguage.thai ? 'ตั้งค่า' : 'Settings';
@@ -243,4 +244,165 @@ class AppStrings {
   String get next => language == AppLanguage.thai ? 'ถัดไป' : 'Next';
   String get getStarted =>
       language == AppLanguage.thai ? 'เริ่มต้นใช้งาน' : 'Get Started';
+
+  // Dashboard Menu
+  String get dashboard =>
+      language == AppLanguage.thai ? 'หน้าหลัก' : 'Dashboard';
+  String get menuMyResumes =>
+      language == AppLanguage.thai ? 'เรซูเม่ของฉัน' : 'My Resumes';
+  String get menuMyResumesDesc => language == AppLanguage.thai
+      ? 'ดูและจัดการเรซูเม่ทั้งหมด'
+      : 'View and manage all your resumes';
+  String get menuCoverLetter =>
+      language == AppLanguage.thai ? 'เขียนจดหมายสมัครงาน' : 'Cover Letter';
+  String get menuCoverLetterDesc => language == AppLanguage.thai
+      ? 'สร้างจดหมายสมัครงาน ด้วย AI'
+      : 'Generate AI-powered cover letters';
+  String get menuAtsCheck =>
+      language == AppLanguage.thai ? 'ฝึกสัมภาษณ์ AI' : 'AI Interview Coach';
+  String get menuAtsCheckDesc => language == AppLanguage.thai
+      ? 'ฝึกซ้อมสัมภาษณ์งานกับ AI'
+      : 'Practice job interviews with AI';
+  String get menuSettings =>
+      language == AppLanguage.thai ? 'ตั้งค่า' : 'Settings';
+  String get menuSettingsDesc => language == AppLanguage.thai
+      ? 'จัดการบัญชีและการตั้งค่า'
+      : 'Manage account and preferences';
+  String get comingSoon =>
+      language == AppLanguage.thai ? 'เร็วๆ นี้' : 'Coming Soon';
+
+  // Settings Page
+  String get subscription =>
+      language == AppLanguage.thai ? 'การสมัครสมาชิก' : 'Subscription';
+  String get expiresOn =>
+      language == AppLanguage.thai ? 'หมดอายุ' : 'Expires on';
+  String get lifetimeAccess =>
+      language == AppLanguage.thai ? 'ใช้งานได้ตลอดชีพ' : 'Lifetime Access';
+  String get upgradeForMore => language == AppLanguage.thai
+      ? 'อัปเกรดเพื่อปลดล็อกฟีเจอร์เพิ่มเติม'
+      : 'Upgrade to unlock more features';
+  String get upgradeToPro =>
+      language == AppLanguage.thai ? 'อัปเกรดเป็น Pro' : 'Upgrade to Pro';
+
+  // Interview Coach
+  String get interviewCoachTitle => language == AppLanguage.thai
+      ? 'ฝึกซ้อมสัมภาษณ์งานกับ AI'
+      : 'Practice Job Interviews with AI';
+  String get interviewCoachDesc => language == AppLanguage.thai
+      ? 'AI จะถามคำถามสัมภาษณ์และให้ feedback เพื่อช่วยคุณเตรียมตัว'
+      : 'AI will ask interview questions and provide feedback to help you prepare';
+  String get jobPosition =>
+      language == AppLanguage.thai ? 'ตำแหน่งงาน' : 'Job Position';
+  String get jobPositionHint => language == AppLanguage.thai
+      ? 'เช่น Software Engineer, Marketing Manager'
+      : 'e.g., Software Engineer, Marketing Manager';
+  String get startInterview =>
+      language == AppLanguage.thai ? 'เริ่มสัมภาษณ์' : 'Start Interview';
+  String interviewWelcome(String position) => language == AppLanguage.thai
+      ? 'ยินดีต้อนรับสู่การฝึกสัมภาษณ์สำหรับตำแหน่ง $position! ผมจะถามคำถามและให้ feedback หลังจากคุณตอบ'
+      : 'Welcome to the interview practice for $position! I\'ll ask questions and provide feedback after your answers.';
+  String get typeYourAnswer => language == AppLanguage.thai
+      ? 'พิมพ์คำตอบของคุณ...'
+      : 'Type your answer...';
+  String get newSession =>
+      language == AppLanguage.thai ? 'เริ่มใหม่' : 'New Session';
+  String get newSessionConfirm => language == AppLanguage.thai
+      ? 'ต้องการเริ่มการสัมภาษณ์ใหม่หรือไม่?'
+      : 'Do you want to start a new interview session?';
+  String get practiceLanguage =>
+      language == AppLanguage.thai ? 'ภาษาที่ใช้ในการฝึก' : 'Practice Language';
+  String get questionLabel =>
+      language == AppLanguage.thai ? 'คำถาม' : 'Question';
+  String get feedbackLabel =>
+      language == AppLanguage.thai ? 'ความคิดเห็น' : 'Feedback';
+  String get answerHint =>
+      language == AppLanguage.thai ? 'แนะนำวิธีตอบ' : 'Answer Tips';
+  String get gotIt => language == AppLanguage.thai ? 'เข้าใจแล้ว' : 'Got it';
+  String get getHintButton =>
+      language == AppLanguage.thai ? 'ขอคำแนะนำ' : 'Get Hint';
+
+  // Salary Estimator
+  String get salaryEstimator =>
+      language == AppLanguage.thai ? 'ประเมินเงินเดือน' : 'Salary Estimator';
+  String get salaryEstimatorDesc => language == AppLanguage.thai
+      ? 'เช็คมูลค่าตลาดของคุณ'
+      : 'Estimate your market value';
+  String get yearsOfExperience =>
+      language == AppLanguage.thai ? 'ประสบการณ์ (ปี)' : 'Years of Experience';
+  String get location => language == AppLanguage.thai ? 'สถานที่' : 'Location';
+  String get locationHint => language == AppLanguage.thai
+      ? 'เช่น กรุงเทพฯ, เชียงใหม่'
+      : 'e.g., Bangkok, Chiang Mai';
+  String get estimateSalary =>
+      language == AppLanguage.thai ? 'ประเมินเงินเดือน' : 'Estimate Salary';
+  String get estimatedSalaryRange => language == AppLanguage.thai
+      ? 'ช่วงเงินเดือนที่ประเมิน'
+      : 'Estimated Salary Range';
+  String get keyFactors =>
+      language == AppLanguage.thai ? 'ปัจจัยสำคัญ' : 'Key Factors';
+  String get required =>
+      language == AppLanguage.thai ? 'จำเป็นต้องระบุ' : 'Required';
+  String get month => language == AppLanguage.thai ? 'เดือน' : 'month';
+
+  // Dream Job Roadmap
+  String get dreamJobRoadmap =>
+      language == AppLanguage.thai ? 'เส้นทางสู่งานในฝัน' : 'Dream Job Roadmap';
+  String get dreamJobRoadmapDesc => language == AppLanguage.thai
+      ? 'วางแผนเส้นทางสู่ความสำเร็จ'
+      : 'Plan your path to success';
+  String get startPlanning =>
+      language == AppLanguage.thai ? 'เริ่มวางแผน' : 'Start Planning';
+
+  String get consultingCoach => language == AppLanguage.thai
+      ? 'กำลังปรึกษาโค้ชอาชีพ AI...'
+      : 'Consulting AI Career Coach...';
+  String get whereDoYouWantToBe => language == AppLanguage.thai
+      ? 'เป้าหมายสูงสุดของคุณคืออะไร?'
+      : 'Where do you want to be?';
+  String get defineGoal => language == AppLanguage.thai
+      ? 'กำหนดเป้าหมายอาชีพ แล้วให้ AI วางแผนเส้นทางให้คุณ'
+      : 'Define your career goal and let AI map the path for you.';
+  String get targetJobTitle =>
+      language == AppLanguage.thai ? 'ตำแหน่งงานในฝัน' : 'Target Job Title';
+  String get dreamCompanyOptional => language == AppLanguage.thai
+      ? 'บริษัทในฝัน (ระบุหรือไม่ก็ได้)'
+      : 'Dream Company (Optional)';
+  String get currentLevel =>
+      language == AppLanguage.thai ? 'ระดับปัจจุบัน' : 'Current Level';
+  String get generateRoadmap =>
+      language == AppLanguage.thai ? 'สร้างแผนที่เส้นทาง' : 'Generate Roadmap';
+  String get at => language == AppLanguage.thai ? 'ที่' : 'at';
+  String get completed =>
+      language == AppLanguage.thai ? 'สำเร็จแล้ว' : 'Completed';
+  String get yourSteps =>
+      language == AppLanguage.thai ? 'ขั้นตอนของคุณ' : 'Your Steps';
+  // Smart Cover Letter
+  String get smartCoverLetter => language == AppLanguage.thai
+      ? 'Smart Cover Letter'
+      : 'Smart Cover Letter';
+  String get coverLetterTips => language == AppLanguage.thai
+      ? 'วางรายละเอียดงาน (Job Description) ด้านล่าง AI จะเขียนจดหมายสมัครงานให้เข้ากับจุดแข็งในเรซูเม่ของคุณ'
+      : 'Paste the Job Description below. AI will tailor your cover letter to match your resume strengths with their requirements.';
+  String get jobDescriptionLabel =>
+      language == AppLanguage.thai ? 'รายละเอียดงาน:' : 'Job Description:';
+  String get jobDescriptionHint => language == AppLanguage.thai
+      ? 'วางรายละเอียดงานที่นี่...'
+      : 'Paste Job Description here...';
+  String get enterJobDescription => language == AppLanguage.thai
+      ? 'กรุณากรอกรายละเอียดงาน'
+      : 'Please enter a Job Description';
+  String get generating =>
+      language == AppLanguage.thai ? 'กำลังสร้าง...' : 'Generating...';
+  String get generateCoverLetter => language == AppLanguage.thai
+      ? 'สร้าง Cover Letter'
+      : 'Generate Cover Letter';
+  String get yourCoverLetter =>
+      language == AppLanguage.thai ? 'จดหมายของคุณ:' : 'Your Cover Letter:';
+  String get copyToClipboard =>
+      language == AppLanguage.thai ? 'คัดลอกลงคลิปบอร์ด' : 'Copy to Clipboard';
+  String get copiedToClipboard => language == AppLanguage.thai
+      ? 'คัดลอกเรียบร้อย!'
+      : 'Copied to clipboard!';
+  String get copyText =>
+      language == AppLanguage.thai ? 'คัดลอกข้อความ' : 'Copy Text';
 }
