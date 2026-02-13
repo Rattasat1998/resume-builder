@@ -42,22 +42,12 @@ class _ProfileFormState extends State<ProfileForm> {
   @override
   void didUpdateWidget(ProfileForm oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.profile != widget.profile) {
-      // Check if avatar URL changed (e.g., after upload to Supabase)
-      final avatarChanged =
-          oldWidget.profile.avatarUrl != widget.profile.avatarUrl;
-
-      _fullNameController.text = widget.profile.fullName;
-      _jobTitleController.text = widget.profile.jobTitle;
-      _summaryController.text = widget.profile.summary;
-
-      if (avatarChanged) {
-        setState(() {
-          _avatarPath = widget.profile.avatarUrl;
-        });
-      } else {
+    // Only update avatar path if it changed externally (e.g., after Supabase upload)
+    // Do NOT update text controllers here - it causes text to be overwritten while typing
+    if (oldWidget.profile.avatarUrl != widget.profile.avatarUrl) {
+      setState(() {
         _avatarPath = widget.profile.avatarUrl;
-      }
+      });
     }
   }
 

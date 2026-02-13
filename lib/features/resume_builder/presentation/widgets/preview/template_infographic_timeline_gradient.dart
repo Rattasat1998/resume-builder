@@ -1,6 +1,7 @@
-import 'dart:io';
+// Avatar helper handles file/network images internally
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../../../../core/utils/avatar_image_helper.dart';
 import '../../../domain/entities/resume_draft.dart';
 import '../../../domain/entities/resume_language.dart';
 import '../../../domain/entities/sections/skill.dart';
@@ -57,23 +58,38 @@ class TemplateInfographicPreview extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 3),
                     color: Colors.white,
-                    image: draft.profile.avatarUrl != null
-                        ? DecorationImage(image: FileImage(File(draft.profile.avatarUrl!)), fit: BoxFit.cover)
-                        : null,
+                    image: AvatarImageHelper.getDecorationImage(
+                      draft.profile.avatarUrl,
+                    ),
                   ),
-                  child: draft.profile.avatarUrl == null
+                  child:
+                      AvatarImageHelper.getImageProvider(
+                            draft.profile.avatarUrl,
+                          ) ==
+                          null
                       ? Icon(Icons.person, size: 40, color: _primaryColor)
                       : null,
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  draft.profile.fullName.isEmpty ? 'Your Name' : draft.profile.fullName,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                  draft.profile.fullName.isEmpty
+                      ? 'Your Name'
+                      : draft.profile.fullName,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  draft.profile.jobTitle.isEmpty ? 'Job Title' : draft.profile.jobTitle,
-                  style: TextStyle(fontSize: 10, color: Colors.white.withValues(alpha: 0.9)),
+                  draft.profile.jobTitle.isEmpty
+                      ? 'Job Title'
+                      : draft.profile.jobTitle,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.white.withValues(alpha: 0.9),
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
@@ -85,7 +101,15 @@ class TemplateInfographicPreview extends StatelessWidget {
                 const SizedBox(height: 24),
 
                 // Skills with visual bars
-                Text(_strings.skills.toUpperCase(), style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 2)),
+                Text(
+                  _strings.skills.toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    letterSpacing: 2,
+                  ),
+                ),
                 const SizedBox(height: 12),
                 ...draft.skills.take(5).map((skill) => _buildSkillBar(skill)),
               ],
@@ -105,15 +129,36 @@ class TemplateInfographicPreview extends StatelessWidget {
                       children: [
                         Container(
                           padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(color: _primaryColor.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
-                          child: Icon(Icons.person_outline, color: _primaryColor, size: 20),
+                          decoration: BoxDecoration(
+                            color: _primaryColor.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            Icons.person_outline,
+                            color: _primaryColor,
+                            size: 20,
+                          ),
                         ),
                         const SizedBox(width: 12),
-                        Text(_strings.aboutMe.toUpperCase(), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                        Text(
+                          _strings.aboutMe.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text(draft.profile.summary, style: TextStyle(fontSize: 10, height: 1.6, color: Colors.grey.shade700)),
+                    Text(
+                      draft.profile.summary,
+                      style: TextStyle(
+                        fontSize: 10,
+                        height: 1.6,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
                     const SizedBox(height: 20),
                   ],
 
@@ -122,11 +167,25 @@ class TemplateInfographicPreview extends StatelessWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(color: _secondaryColor.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
-                        child: Icon(Icons.work_outline, color: _secondaryColor, size: 20),
+                        decoration: BoxDecoration(
+                          color: _secondaryColor.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Icons.work_outline,
+                          color: _secondaryColor,
+                          size: 20,
+                        ),
                       ),
                       const SizedBox(width: 12),
-                      Text(_strings.workExperience.toUpperCase(), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                      Text(
+                        _strings.workExperience.toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 12),
@@ -138,32 +197,69 @@ class TemplateInfographicPreview extends StatelessWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(color: Colors.green.withValues(alpha: 0.1), borderRadius: BorderRadius.circular(8)),
-                        child: const Icon(Icons.school_outlined, color: Colors.green, size: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.green.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: const Icon(
+                          Icons.school_outlined,
+                          color: Colors.green,
+                          size: 20,
+                        ),
                       ),
                       const SizedBox(width: 12),
-                      Text(_strings.education.toUpperCase(), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                      Text(
+                        _strings.education.toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 12),
-                  ...draft.educations.take(2).map((edu) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      children: [
-                        Container(width: 8, height: 8, decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(2))),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  ...draft.educations
+                      .take(2)
+                      .map(
+                        (edu) => Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Row(
                             children: [
-                              Text(edu.degree, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600)),
-                              Text(edu.institution, style: TextStyle(fontSize: 9, color: Colors.grey.shade600)),
+                              Container(
+                                width: 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      edu.degree,
+                                      style: const TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      edu.institution,
+                                      style: TextStyle(
+                                        fontSize: 9,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-                  )),
+                      ),
                 ],
               ),
             ),
@@ -181,7 +277,16 @@ class TemplateInfographicPreview extends StatelessWidget {
         children: [
           Icon(icon, size: 14, color: Colors.white.withValues(alpha: 0.8)),
           const SizedBox(width: 8),
-          Expanded(child: Text(text, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.9)), overflow: TextOverflow.ellipsis)),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 9,
+                color: Colors.white.withValues(alpha: 0.9),
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
     );
@@ -193,15 +298,26 @@ class TemplateInfographicPreview extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(skill.name, style: const TextStyle(fontSize: 9, color: Colors.white)),
+          Text(
+            skill.name,
+            style: const TextStyle(fontSize: 9, color: Colors.white),
+          ),
           const SizedBox(height: 3),
           Container(
             height: 4,
-            decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.3), borderRadius: BorderRadius.circular(2)),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(2),
+            ),
             child: FractionallySizedBox(
               alignment: Alignment.centerLeft,
               widthFactor: skill.level.percentage / 100,
-              child: Container(decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(2))),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
             ),
           ),
         ],
@@ -228,8 +344,17 @@ class TemplateInfographicPreview extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(exp.position, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
-                Text('${exp.companyName} • ${exp.dateRange}', style: TextStyle(fontSize: 9, color: Colors.grey.shade600)),
+                Text(
+                  exp.position,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Text(
+                  '${exp.companyName} • ${exp.dateRange}',
+                  style: TextStyle(fontSize: 9, color: Colors.grey.shade600),
+                ),
               ],
             ),
           ),
@@ -293,13 +418,24 @@ class TemplateTimelinePreview extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        draft.profile.fullName.isEmpty ? _strings.yourName : draft.profile.fullName,
-                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                        draft.profile.fullName.isEmpty
+                            ? _strings.yourName
+                            : draft.profile.fullName,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        draft.profile.jobTitle.isEmpty ? _strings.jobTitle : draft.profile.jobTitle,
-                        style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.9)),
+                        draft.profile.jobTitle.isEmpty
+                            ? _strings.jobTitle
+                            : draft.profile.jobTitle,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white.withValues(alpha: 0.9),
+                        ),
                       ),
                     ],
                   ),
@@ -309,9 +445,21 @@ class TemplateTimelinePreview extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     if (draft.contact.email.isNotEmpty)
-                      Text(draft.contact.email, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.9))),
+                      Text(
+                        draft.contact.email,
+                        style: TextStyle(
+                          fontSize: 9,
+                          color: Colors.white.withValues(alpha: 0.9),
+                        ),
+                      ),
                     if (draft.contact.phone.isNotEmpty)
-                      Text(draft.contact.phone, style: TextStyle(fontSize: 9, color: Colors.white.withValues(alpha: 0.9))),
+                      Text(
+                        draft.contact.phone,
+                        style: TextStyle(
+                          fontSize: 9,
+                          color: Colors.white.withValues(alpha: 0.9),
+                        ),
+                      ),
                   ],
                 ),
               ],
@@ -331,12 +479,25 @@ class TemplateTimelinePreview extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(_strings.workExperience.toUpperCase(), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                        Text(
+                          _strings.workExperience.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                          ),
+                        ),
                         const SizedBox(height: 16),
-                        ...draft.experiences.asMap().entries.take(3).map((entry) {
+                        ...draft.experiences.asMap().entries.take(3).map((
+                          entry,
+                        ) {
                           final index = entry.key;
                           final exp = entry.value;
-                          return _buildTimelineItem(exp, index == 0, index == math.min(2, draft.experiences.length - 1));
+                          return _buildTimelineItem(
+                            exp,
+                            index == 0,
+                            index == math.min(2, draft.experiences.length - 1),
+                          );
                         }),
                       ],
                     ),
@@ -348,43 +509,102 @@ class TemplateTimelinePreview extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Education
-                        Text(_strings.education.toUpperCase(), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1)),
-                        const SizedBox(height: 12),
-                        ...draft.educations.take(2).map((edu) => Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: Container(
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: _primaryColor.withValues(alpha: 0.05),
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: _primaryColor.withValues(alpha: 0.2)),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(edu.degree, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600)),
-                                Text(edu.institution, style: TextStyle(fontSize: 9, color: Colors.grey.shade600)),
-                                Text(edu.dateRange, style: TextStyle(fontSize: 8, color: _primaryColor)),
-                              ],
-                            ),
+                        Text(
+                          _strings.education.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
                           ),
-                        )),
+                        ),
+                        const SizedBox(height: 12),
+                        ...draft.educations
+                            .take(2)
+                            .map(
+                              (edu) => Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: _primaryColor.withValues(
+                                      alpha: 0.05,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                      color: _primaryColor.withValues(
+                                        alpha: 0.2,
+                                      ),
+                                    ),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        edu.degree,
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Text(
+                                        edu.institution,
+                                        style: TextStyle(
+                                          fontSize: 9,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                      Text(
+                                        edu.dateRange,
+                                        style: TextStyle(
+                                          fontSize: 8,
+                                          color: _primaryColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
                         const SizedBox(height: 16),
 
                         // Skills
-                        Text(_strings.skills.toUpperCase(), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                        Text(
+                          _strings.skills.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                          ),
+                        ),
                         const SizedBox(height: 12),
                         Wrap(
                           spacing: 6,
                           runSpacing: 6,
-                          children: draft.skills.take(8).map((skill) => Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [_primaryColor, _secondaryColor]),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: Text(skill.name, style: const TextStyle(fontSize: 8, color: Colors.white)),
-                          )).toList(),
+                          children: draft.skills
+                              .take(8)
+                              .map(
+                                (skill) => Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 5,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [_primaryColor, _secondaryColor],
+                                    ),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Text(
+                                    skill.name,
+                                    style: const TextStyle(
+                                      fontSize: 8,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
                         ),
                       ],
                     ),
@@ -410,7 +630,9 @@ class TemplateTimelinePreview extends StatelessWidget {
                 width: 16,
                 height: 16,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [_primaryColor, _secondaryColor]),
+                  gradient: LinearGradient(
+                    colors: [_primaryColor, _secondaryColor],
+                  ),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.circle, size: 6, color: Colors.white),
@@ -438,13 +660,38 @@ class TemplateTimelinePreview extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(exp.dateRange, style: TextStyle(fontSize: 9, color: _primaryColor, fontWeight: FontWeight.w600)),
+                  Text(
+                    exp.dateRange,
+                    style: TextStyle(
+                      fontSize: 9,
+                      color: _primaryColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   const SizedBox(height: 4),
-                  Text(exp.position, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
-                  Text(exp.companyName, style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
+                  Text(
+                    exp.position,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    exp.companyName,
+                    style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
+                  ),
                   if (exp.description.isNotEmpty) ...[
                     const SizedBox(height: 4),
-                    Text(exp.description, style: TextStyle(fontSize: 9, color: Colors.grey.shade700, height: 1.4), maxLines: 2, overflow: TextOverflow.ellipsis),
+                    Text(
+                      exp.description,
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.grey.shade700,
+                        height: 1.4,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ],
                 ],
               ),
@@ -494,7 +741,10 @@ class TemplateGradientPreview extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [_primaryColor.withValues(alpha: 0.05), _secondaryColor.withValues(alpha: 0.1)],
+          colors: [
+            _primaryColor.withValues(alpha: 0.05),
+            _secondaryColor.withValues(alpha: 0.1),
+          ],
         ),
       ),
       child: Column(
@@ -525,7 +775,12 @@ class TemplateGradientPreview extends StatelessWidget {
                   padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: LinearGradient(colors: [Colors.white.withValues(alpha: 0.8), Colors.white.withValues(alpha: 0.4)]),
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.white.withValues(alpha: 0.8),
+                        Colors.white.withValues(alpha: 0.4),
+                      ],
+                    ),
                   ),
                   child: Container(
                     width: 60,
@@ -533,11 +788,15 @@ class TemplateGradientPreview extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white,
-                      image: draft.profile.avatarUrl != null
-                          ? DecorationImage(image: FileImage(File(draft.profile.avatarUrl!)), fit: BoxFit.cover)
-                          : null,
+                      image: AvatarImageHelper.getDecorationImage(
+                        draft.profile.avatarUrl,
+                      ),
                     ),
-                    child: draft.profile.avatarUrl == null
+                    child:
+                        AvatarImageHelper.getImageProvider(
+                              draft.profile.avatarUrl,
+                            ) ==
+                            null
                         ? Icon(Icons.person, color: _primaryColor, size: 30)
                         : null,
                   ),
@@ -548,12 +807,23 @@ class TemplateGradientPreview extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        draft.profile.fullName.isEmpty ? _strings.yourName : draft.profile.fullName,
-                        style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+                        draft.profile.fullName.isEmpty
+                            ? _strings.yourName
+                            : draft.profile.fullName,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                       Text(
-                        draft.profile.jobTitle.isEmpty ? _strings.jobTitle : draft.profile.jobTitle,
-                        style: TextStyle(fontSize: 12, color: Colors.white.withValues(alpha: 0.9)),
+                        draft.profile.jobTitle.isEmpty
+                            ? _strings.jobTitle
+                            : draft.profile.jobTitle,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white.withValues(alpha: 0.9),
+                        ),
                       ),
                     ],
                   ),
@@ -577,19 +847,42 @@ class TemplateGradientPreview extends StatelessWidget {
                       children: [
                         if (draft.profile.summary.isNotEmpty) ...[
                           _buildGradientSection(_strings.aboutMe),
-                          Text(draft.profile.summary, style: TextStyle(fontSize: 10, height: 1.6, color: Colors.grey.shade700)),
+                          Text(
+                            draft.profile.summary,
+                            style: TextStyle(
+                              fontSize: 10,
+                              height: 1.6,
+                              color: Colors.grey.shade700,
+                            ),
+                          ),
                           const SizedBox(height: 16),
                         ],
                         _buildGradientSection(_strings.workExperience),
-                        ...draft.experiences.take(2).map((exp) => _buildGradientCard(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(exp.position, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600)),
-                              Text('${exp.companyName} • ${exp.dateRange}', style: TextStyle(fontSize: 9, color: Colors.grey.shade600)),
-                            ],
-                          ),
-                        )),
+                        ...draft.experiences
+                            .take(2)
+                            .map(
+                              (exp) => _buildGradientCard(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      exp.position,
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${exp.companyName} • ${exp.dateRange}',
+                                      style: TextStyle(
+                                        fontSize: 9,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                       ],
                     ),
                   ),
@@ -605,11 +898,20 @@ class TemplateGradientPreview extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               if (draft.contact.email.isNotEmpty)
-                                _buildGradientContact(Icons.email, draft.contact.email),
+                                _buildGradientContact(
+                                  Icons.email,
+                                  draft.contact.email,
+                                ),
                               if (draft.contact.phone.isNotEmpty)
-                                _buildGradientContact(Icons.phone, draft.contact.phone),
+                                _buildGradientContact(
+                                  Icons.phone,
+                                  draft.contact.phone,
+                                ),
                               if (draft.contact.location.isNotEmpty)
-                                _buildGradientContact(Icons.location_on, draft.contact.location),
+                                _buildGradientContact(
+                                  Icons.location_on,
+                                  draft.contact.location,
+                                ),
                             ],
                           ),
                         ),
@@ -618,14 +920,34 @@ class TemplateGradientPreview extends StatelessWidget {
                         Wrap(
                           spacing: 6,
                           runSpacing: 6,
-                          children: draft.skills.take(6).map((skill) => Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(colors: [_primaryColor.withValues(alpha: 0.8), _secondaryColor.withValues(alpha: 0.8)]),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(skill.name, style: const TextStyle(fontSize: 8, color: Colors.white, fontWeight: FontWeight.w500)),
-                          )).toList(),
+                          children: draft.skills
+                              .take(6)
+                              .map(
+                                (skill) => Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 5,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        _primaryColor.withValues(alpha: 0.8),
+                                        _secondaryColor.withValues(alpha: 0.8),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    skill.name,
+                                    style: const TextStyle(
+                                      fontSize: 8,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
                         ),
                       ],
                     ),
@@ -644,8 +966,18 @@ class TemplateGradientPreview extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: ShaderMask(
-        shaderCallback: (bounds) => LinearGradient(colors: [_primaryColor, _secondaryColor]).createShader(bounds),
-        child: Text(title.toUpperCase(), style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 1)),
+        shaderCallback: (bounds) => LinearGradient(
+          colors: [_primaryColor, _secondaryColor],
+        ).createShader(bounds),
+        child: Text(
+          title.toUpperCase(),
+          style: const TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            letterSpacing: 1,
+          ),
+        ),
       ),
     );
   }
@@ -675,14 +1007,21 @@ class TemplateGradientPreview extends StatelessWidget {
       child: Row(
         children: [
           ShaderMask(
-            shaderCallback: (bounds) => LinearGradient(colors: [_primaryColor, _secondaryColor]).createShader(bounds),
+            shaderCallback: (bounds) => LinearGradient(
+              colors: [_primaryColor, _secondaryColor],
+            ).createShader(bounds),
             child: Icon(icon, size: 14, color: Colors.white),
           ),
           const SizedBox(width: 8),
-          Expanded(child: Text(text, style: TextStyle(fontSize: 9, color: Colors.grey.shade700), overflow: TextOverflow.ellipsis)),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(fontSize: 9, color: Colors.grey.shade700),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ],
       ),
     );
   }
 }
-

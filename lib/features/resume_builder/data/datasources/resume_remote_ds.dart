@@ -43,10 +43,14 @@ class ResumeRemoteDataSourceImpl implements ResumeRemoteDataSource {
   Future<List<ResumeDraftDto>> getAllDrafts() async {
     if (!isConnected) return [];
 
+    final userId = _client.auth.currentUser?.id;
+    if (userId == null) return [];
+
     try {
       final response = await _client
           .from(SupabaseConfig.resumesTable)
           .select()
+          .eq('user_id', userId)
           .order('updated_at', ascending: false);
 
       return (response as List).map((json) => _parseResumeDraft(json)).toList();
@@ -59,11 +63,15 @@ class ResumeRemoteDataSourceImpl implements ResumeRemoteDataSource {
   Future<ResumeDraftDto?> getDraft(String id) async {
     if (!isConnected) return null;
 
+    final userId = _client.auth.currentUser?.id;
+    if (userId == null) return null;
+
     try {
       final response = await _client
           .from(SupabaseConfig.resumesTable)
           .select()
           .eq('id', id)
+          .eq('user_id', userId)
           .maybeSingle();
 
       if (response == null) return null;
@@ -77,8 +85,14 @@ class ResumeRemoteDataSourceImpl implements ResumeRemoteDataSource {
   Future<void> saveDraft(ResumeDraftDto draft) async {
     if (!isConnected) return;
 
+    final userId = _client.auth.currentUser?.id;
+    if (userId == null) {
+      throw const ServerException(message: 'User not authenticated');
+    }
+
     try {
       final data = _toSupabaseFormat(draft);
+      data['user_id'] = userId;
 
       await _client
           .from(SupabaseConfig.resumesTable)
@@ -92,8 +106,15 @@ class ResumeRemoteDataSourceImpl implements ResumeRemoteDataSource {
   Future<void> deleteDraft(String id) async {
     if (!isConnected) return;
 
+    final userId = _client.auth.currentUser?.id;
+    if (userId == null) return;
+
     try {
-      await _client.from(SupabaseConfig.resumesTable).delete().eq('id', id);
+      await _client
+          .from(SupabaseConfig.resumesTable)
+          .delete()
+          .eq('id', id)
+          .eq('user_id', userId);
     } catch (e) {
       throw ServerException(message: 'Failed to delete resume: $e');
     }

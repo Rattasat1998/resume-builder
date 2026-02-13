@@ -1,5 +1,6 @@
-import 'dart:io';
+// Avatar helper handles file/network images internally
 import 'package:flutter/material.dart';
+import '../../../../../core/utils/avatar_image_helper.dart';
 import '../../../domain/entities/resume_draft.dart';
 import '../../../domain/entities/resume_language.dart';
 import '../../../domain/entities/sections/language.dart';
@@ -43,10 +44,7 @@ class TemplateElegantPreview extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            const Color(0xFFFDF8F3),
-            const Color(0xFFFAF6F1),
-          ],
+          colors: [const Color(0xFFFDF8F3), const Color(0xFFFAF6F1)],
         ),
       ),
       child: SingleChildScrollView(
@@ -75,7 +73,11 @@ class TemplateElegantPreview extends StatelessWidget {
                       border: Border.all(color: _secondaryColor, width: 1),
                       borderRadius: BorderRadius.circular(50),
                     ),
-                    child: Icon(Icons.diamond_outlined, color: _secondaryColor, size: 14),
+                    child: Icon(
+                      Icons.diamond_outlined,
+                      color: _secondaryColor,
+                      size: 14,
+                    ),
                   ),
                 ),
                 Expanded(
@@ -94,7 +96,9 @@ class TemplateElegantPreview extends StatelessWidget {
 
             // Name with elegant typography
             Text(
-              draft.profile.fullName.isEmpty ? 'Your Name' : draft.profile.fullName,
+              draft.profile.fullName.isEmpty
+                  ? 'Your Name'
+                  : draft.profile.fullName,
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w300,
@@ -109,7 +113,9 @@ class TemplateElegantPreview extends StatelessWidget {
             Column(
               children: [
                 Text(
-                  draft.profile.jobTitle.isEmpty ? 'Professional Title' : draft.profile.jobTitle,
+                  draft.profile.jobTitle.isEmpty
+                      ? 'Professional Title'
+                      : draft.profile.jobTitle,
                   style: TextStyle(
                     fontSize: 13,
                     fontStyle: FontStyle.italic,
@@ -132,8 +138,12 @@ class TemplateElegantPreview extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(color: _secondaryColor.withValues(alpha: 0.3)),
-                  bottom: BorderSide(color: _secondaryColor.withValues(alpha: 0.3)),
+                  top: BorderSide(
+                    color: _secondaryColor.withValues(alpha: 0.3),
+                  ),
+                  bottom: BorderSide(
+                    color: _secondaryColor.withValues(alpha: 0.3),
+                  ),
                 ),
               ),
               child: Wrap(
@@ -141,11 +151,20 @@ class TemplateElegantPreview extends StatelessWidget {
                 spacing: 32,
                 children: [
                   if (draft.contact.email.isNotEmpty)
-                    _buildElegantContact(Icons.mail_outline, draft.contact.email),
+                    _buildElegantContact(
+                      Icons.mail_outline,
+                      draft.contact.email,
+                    ),
                   if (draft.contact.phone.isNotEmpty)
-                    _buildElegantContact(Icons.phone_outlined, draft.contact.phone),
+                    _buildElegantContact(
+                      Icons.phone_outlined,
+                      draft.contact.phone,
+                    ),
                   if (draft.contact.location.isNotEmpty)
-                    _buildElegantContact(Icons.place_outlined, draft.contact.location),
+                    _buildElegantContact(
+                      Icons.place_outlined,
+                      draft.contact.location,
+                    ),
                 ],
               ),
             ),
@@ -157,7 +176,11 @@ class TemplateElegantPreview extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   children: [
-                    Icon(Icons.format_quote, color: _secondaryColor.withValues(alpha: 0.4), size: 24),
+                    Icon(
+                      Icons.format_quote,
+                      color: _secondaryColor.withValues(alpha: 0.4),
+                      size: 24,
+                    ),
                     const SizedBox(height: 12),
                     Text(
                       draft.profile.summary,
@@ -187,7 +210,9 @@ class TemplateElegantPreview extends StatelessWidget {
                     children: [
                       _buildElegantSection(_strings.workExperience),
                       const SizedBox(height: 16),
-                      ...draft.experiences.take(3).map((exp) => _buildElegantExperience(exp)),
+                      ...draft.experiences
+                          .take(3)
+                          .map((exp) => _buildElegantExperience(exp)),
                     ],
                   ),
                 ),
@@ -201,7 +226,10 @@ class TemplateElegantPreview extends StatelessWidget {
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [_secondaryColor.withValues(alpha: 0.5), Colors.transparent],
+                      colors: [
+                        _secondaryColor.withValues(alpha: 0.5),
+                        Colors.transparent,
+                      ],
                     ),
                   ),
                 ),
@@ -213,7 +241,9 @@ class TemplateElegantPreview extends StatelessWidget {
                     children: [
                       _buildElegantSection(_strings.education),
                       const SizedBox(height: 16),
-                      ...draft.educations.take(2).map((edu) => _buildElegantEducation(edu)),
+                      ...draft.educations
+                          .take(2)
+                          .map((edu) => _buildElegantEducation(edu)),
 
                       const SizedBox(height: 28),
 
@@ -222,9 +252,44 @@ class TemplateElegantPreview extends StatelessWidget {
                       Wrap(
                         spacing: 0,
                         runSpacing: 10,
-                        children: draft.skills.take(6).map((skill) =>
-                          SizedBox(
-                            width: double.infinity,
+                        children: draft.skills
+                            .take(6)
+                            .map(
+                              (skill) => SizedBox(
+                                width: double.infinity,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 4,
+                                      height: 4,
+                                      decoration: BoxDecoration(
+                                        color: _secondaryColor,
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      skill.name,
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.grey.shade700,
+                                        letterSpacing: 0.5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                            .toList(),
+                      ),
+
+                      if (draft.languages.isNotEmpty) ...[
+                        const SizedBox(height: 28),
+                        _buildElegantSection(_strings.languages),
+                        const SizedBox(height: 16),
+                        ...draft.languages.map(
+                          (lang) => Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
                             child: Row(
                               children: [
                                 Container(
@@ -237,7 +302,7 @@ class TemplateElegantPreview extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 10),
                                 Text(
-                                  skill.name,
+                                  '${lang.name} - ${_strings.languageLevel(lang.level.displayName)}',
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: Colors.grey.shade700,
@@ -247,37 +312,7 @@ class TemplateElegantPreview extends StatelessWidget {
                               ],
                             ),
                           ),
-                        ).toList(),
-                      ),
-
-                      if (draft.languages.isNotEmpty) ...[
-                        const SizedBox(height: 28),
-                        _buildElegantSection(_strings.languages),
-                        const SizedBox(height: 16),
-                        ...draft.languages.map((lang) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 4,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                  color: _secondaryColor,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                '${lang.name} - ${_strings.languageLevel(lang.level.displayName)}',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  color: Colors.grey.shade700,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )),
+                        ),
                       ],
 
                       if (draft.hobbies.isNotEmpty) ...[
@@ -287,21 +322,32 @@ class TemplateElegantPreview extends StatelessWidget {
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
-                          children: draft.hobbies.map((hobby) => Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: _secondaryColor.withValues(alpha: 0.5)),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              hobby.name,
-                              style: TextStyle(
-                                fontSize: 9,
-                                color: Colors.grey.shade600,
-                                letterSpacing: 0.3,
-                              ),
-                            ),
-                          )).toList(),
+                          children: draft.hobbies
+                              .map(
+                                (hobby) => Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: _secondaryColor.withValues(
+                                        alpha: 0.5,
+                                      ),
+                                    ),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    hobby.name,
+                                    style: TextStyle(
+                                      fontSize: 9,
+                                      color: Colors.grey.shade600,
+                                      letterSpacing: 0.3,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
                         ),
                       ],
                     ],
@@ -384,14 +430,14 @@ class TemplateElegantPreview extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text('•', style: TextStyle(color: _secondaryColor, fontSize: 8)),
+                child: Text(
+                  '•',
+                  style: TextStyle(color: _secondaryColor, fontSize: 8),
+                ),
               ),
               Text(
                 exp.dateRange,
-                style: TextStyle(
-                  fontSize: 9,
-                  color: Colors.grey.shade500,
-                ),
+                style: TextStyle(fontSize: 9, color: Colors.grey.shade500),
               ),
             ],
           ),
@@ -499,7 +545,10 @@ class TemplateCreativePreview extends StatelessWidget {
                     height: 100,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.2), width: 2),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        width: 2,
+                      ),
                     ),
                   ),
                 ),
@@ -524,7 +573,9 @@ class TemplateCreativePreview extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        draft.profile.fullName.isEmpty ? 'Your Name' : draft.profile.fullName,
+                        draft.profile.fullName.isEmpty
+                            ? 'Your Name'
+                            : draft.profile.fullName,
                         style: const TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w800,
@@ -534,7 +585,10 @@ class TemplateCreativePreview extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(25),
@@ -547,7 +601,9 @@ class TemplateCreativePreview extends StatelessWidget {
                           ],
                         ),
                         child: Text(
-                          draft.profile.jobTitle.isEmpty ? 'Creative Professional' : draft.profile.jobTitle,
+                          draft.profile.jobTitle.isEmpty
+                              ? 'Creative Professional'
+                              : draft.profile.jobTitle,
                           style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
@@ -577,7 +633,10 @@ class TemplateCreativePreview extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (draft.profile.summary.isNotEmpty) ...[
-                          _buildCreativeSection(_strings.aboutMe, _primaryColor),
+                          _buildCreativeSection(
+                            _strings.aboutMe,
+                            _primaryColor,
+                          ),
                           const SizedBox(height: 12),
                           Text(
                             draft.profile.summary,
@@ -590,9 +649,14 @@ class TemplateCreativePreview extends StatelessWidget {
                           ),
                           const SizedBox(height: 24),
                         ],
-                        _buildCreativeSection(_strings.workExperience, _primaryColor),
+                        _buildCreativeSection(
+                          _strings.workExperience,
+                          _primaryColor,
+                        ),
                         const SizedBox(height: 12),
-                        ...draft.experiences.take(2).map((exp) => _buildCreativeExp(exp)),
+                        ...draft.experiences
+                            .take(2)
+                            .map((exp) => _buildCreativeExp(exp)),
                       ],
                     ),
                   ),
@@ -609,59 +673,121 @@ class TemplateCreativePreview extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildCreativeSection(_strings.contact, _secondaryColor),
+                          _buildCreativeSection(
+                            _strings.contact,
+                            _secondaryColor,
+                          ),
                           const SizedBox(height: 12),
                           if (draft.contact.email.isNotEmpty)
-                            _buildContactRow(Icons.email_rounded, draft.contact.email),
+                            _buildContactRow(
+                              Icons.email_rounded,
+                              draft.contact.email,
+                            ),
                           if (draft.contact.phone.isNotEmpty)
-                            _buildContactRow(Icons.phone_rounded, draft.contact.phone),
+                            _buildContactRow(
+                              Icons.phone_rounded,
+                              draft.contact.phone,
+                            ),
                           if (draft.contact.location.isNotEmpty)
-                            _buildContactRow(Icons.location_on_rounded, draft.contact.location),
+                            _buildContactRow(
+                              Icons.location_on_rounded,
+                              draft.contact.location,
+                            ),
                           const SizedBox(height: 20),
-                          _buildCreativeSection(_strings.skills, _secondaryColor),
+                          _buildCreativeSection(
+                            _strings.skills,
+                            _secondaryColor,
+                          ),
                           const SizedBox(height: 12),
                           Wrap(
                             spacing: 8,
                             runSpacing: 8,
-                            children: draft.skills.take(6).map((skill) => _buildSkillChip(skill)).toList(),
+                            children: draft.skills
+                                .take(6)
+                                .map((skill) => _buildSkillChip(skill))
+                                .toList(),
                           ),
                           if (draft.languages.isNotEmpty) ...[
                             const SizedBox(height: 20),
-                            _buildCreativeSection(_strings.languages, _secondaryColor),
+                            _buildCreativeSection(
+                              _strings.languages,
+                              _secondaryColor,
+                            ),
                             const SizedBox(height: 12),
-                            ...draft.languages.map((lang) => Padding(
-                              padding: const EdgeInsets.only(bottom: 6),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(lang.name, style: TextStyle(fontSize: 10, color: Colors.grey.shade700)),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                    decoration: BoxDecoration(
-                                      color: _secondaryColor.withValues(alpha: 0.2),
-                                      borderRadius: BorderRadius.circular(10),
+                            ...draft.languages.map(
+                              (lang) => Padding(
+                                padding: const EdgeInsets.only(bottom: 6),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      lang.name,
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.grey.shade700,
+                                      ),
                                     ),
-                                    child: Text(_strings.languageLevel(lang.level.displayName), style: TextStyle(fontSize: 8, color: _secondaryColor, fontWeight: FontWeight.w600)),
-                                  ),
-                                ],
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: _secondaryColor.withValues(
+                                          alpha: 0.2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(
+                                        _strings.languageLevel(
+                                          lang.level.displayName,
+                                        ),
+                                        style: TextStyle(
+                                          fontSize: 8,
+                                          color: _secondaryColor,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            )),
+                            ),
                           ],
                           if (draft.hobbies.isNotEmpty) ...[
                             const SizedBox(height: 20),
-                            _buildCreativeSection(_strings.interests, _secondaryColor),
+                            _buildCreativeSection(
+                              _strings.interests,
+                              _secondaryColor,
+                            ),
                             const SizedBox(height: 12),
                             Wrap(
                               spacing: 6,
                               runSpacing: 6,
-                              children: draft.hobbies.map((hobby) => Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: _primaryColor.withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(hobby.name, style: TextStyle(fontSize: 9, color: _primaryColor)),
-                              )).toList(),
+                              children: draft.hobbies
+                                  .map(
+                                    (hobby) => Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                        vertical: 4,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: _primaryColor.withValues(
+                                          alpha: 0.1,
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Text(
+                                        hobby.name,
+                                        style: TextStyle(
+                                          fontSize: 9,
+                                          color: _primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                           ],
                         ],
@@ -730,7 +856,10 @@ class TemplateCreativePreview extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: _secondaryColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
@@ -777,10 +906,7 @@ class TemplateCreativePreview extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
-                fontSize: 10,
-                color: Colors.grey.shade700,
-              ),
+              style: TextStyle(fontSize: 10, color: Colors.grey.shade700),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -794,7 +920,10 @@ class TemplateCreativePreview extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [_primaryColor.withValues(alpha: 0.1), _secondaryColor.withValues(alpha: 0.1)],
+          colors: [
+            _primaryColor.withValues(alpha: 0.1),
+            _secondaryColor.withValues(alpha: 0.1),
+          ],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: _primaryColor.withValues(alpha: 0.2)),
@@ -861,7 +990,10 @@ class TemplateProfessionalPreview extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.white,
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 3),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.3),
+                      width: 3,
+                    ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.2),
@@ -869,14 +1001,15 @@ class TemplateProfessionalPreview extends StatelessWidget {
                         offset: const Offset(0, 5),
                       ),
                     ],
-                    image: draft.profile.avatarUrl != null
-                        ? DecorationImage(
-                            image: FileImage(File(draft.profile.avatarUrl!)),
-                            fit: BoxFit.cover,
-                          )
-                        : null,
+                    image: AvatarImageHelper.getDecorationImage(
+                      draft.profile.avatarUrl,
+                    ),
                   ),
-                  child: draft.profile.avatarUrl == null
+                  child:
+                      AvatarImageHelper.getImageProvider(
+                            draft.profile.avatarUrl,
+                          ) ==
+                          null
                       ? Icon(Icons.person, color: _primaryColor, size: 36)
                       : null,
                 ),
@@ -886,7 +1019,9 @@ class TemplateProfessionalPreview extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        draft.profile.fullName.isEmpty ? 'Your Name' : draft.profile.fullName,
+                        draft.profile.fullName.isEmpty
+                            ? 'Your Name'
+                            : draft.profile.fullName,
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w600,
@@ -896,13 +1031,18 @@ class TemplateProfessionalPreview extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
-                          draft.profile.jobTitle.isEmpty ? 'Professional Title' : draft.profile.jobTitle,
+                          draft.profile.jobTitle.isEmpty
+                              ? 'Professional Title'
+                              : draft.profile.jobTitle,
                           style: TextStyle(
                             fontSize: 11,
                             color: Colors.white.withValues(alpha: 0.95),
@@ -934,7 +1074,10 @@ class TemplateProfessionalPreview extends StatelessWidget {
                 if (draft.contact.phone.isNotEmpty)
                   _buildProfContact(Icons.phone_outlined, draft.contact.phone),
                 if (draft.contact.location.isNotEmpty)
-                  _buildProfContact(Icons.location_on_outlined, draft.contact.location),
+                  _buildProfContact(
+                    Icons.location_on_outlined,
+                    draft.contact.location,
+                  ),
               ],
             ),
           ),
@@ -982,7 +1125,9 @@ class TemplateProfessionalPreview extends StatelessWidget {
                           children: [
                             _buildProfSection(_strings.education),
                             const SizedBox(height: 12),
-                            ...draft.educations.take(2).map((edu) => _buildProfEdu(edu)),
+                            ...draft.educations
+                                .take(2)
+                                .map((edu) => _buildProfEdu(edu)),
                           ],
                         ),
                       ),
@@ -996,42 +1141,76 @@ class TemplateProfessionalPreview extends StatelessWidget {
                             Wrap(
                               spacing: 8,
                               runSpacing: 8,
-                              children: draft.skills.take(8).map((skill) => Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: _primaryColor,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  skill.name,
-                                  style: const TextStyle(
-                                    fontSize: 9,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              )).toList(),
+                              children: draft.skills
+                                  .take(8)
+                                  .map(
+                                    (skill) => Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 6,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: _primaryColor,
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text(
+                                        skill.name,
+                                        style: const TextStyle(
+                                          fontSize: 9,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
                             ),
                             if (draft.languages.isNotEmpty) ...[
                               const SizedBox(height: 20),
                               _buildProfSection(_strings.languages),
                               const SizedBox(height: 12),
-                              ...draft.languages.map((lang) => Padding(
-                                padding: const EdgeInsets.only(bottom: 8),
-                                child: Row(
-                                  children: [
-                                    Expanded(child: Text(lang.name, style: TextStyle(fontSize: 10, color: Colors.grey.shade700))),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                      decoration: BoxDecoration(
-                                        color: _primaryColor.withValues(alpha: 0.1),
-                                        borderRadius: BorderRadius.circular(4),
+                              ...draft.languages.map(
+                                (lang) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          lang.name,
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: Colors.grey.shade700,
+                                          ),
+                                        ),
                                       ),
-                                      child: Text(_strings.languageLevel(lang.level.displayName), style: TextStyle(fontSize: 8, color: _primaryColor, fontWeight: FontWeight.w600)),
-                                    ),
-                                  ],
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 3,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: _primaryColor.withValues(
+                                            alpha: 0.1,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          _strings.languageLevel(
+                                            lang.level.displayName,
+                                          ),
+                                          style: TextStyle(
+                                            fontSize: 8,
+                                            color: _primaryColor,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              )),
+                              ),
                             ],
                             if (draft.hobbies.isNotEmpty) ...[
                               const SizedBox(height: 20),
@@ -1040,14 +1219,33 @@ class TemplateProfessionalPreview extends StatelessWidget {
                               Wrap(
                                 spacing: 6,
                                 runSpacing: 6,
-                                children: draft.hobbies.map((hobby) => Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: _primaryColor.withValues(alpha: 0.3)),
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Text(hobby.name, style: TextStyle(fontSize: 9, color: _primaryColor)),
-                                )).toList(),
+                                children: draft.hobbies
+                                    .map(
+                                      (hobby) => Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 5,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: _primaryColor.withValues(
+                                              alpha: 0.3,
+                                            ),
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          hobby.name,
+                                          style: TextStyle(
+                                            fontSize: 9,
+                                            color: _primaryColor,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
                               ),
                             ],
                           ],
@@ -1105,12 +1303,7 @@ class TemplateProfessionalPreview extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        Expanded(
-          child: Container(
-            height: 1,
-            color: Colors.grey.shade200,
-          ),
-        ),
+        Expanded(child: Container(height: 1, color: Colors.grey.shade200)),
       ],
     );
   }
@@ -1182,21 +1375,14 @@ class TemplateProfessionalPreview extends StatelessWidget {
         children: [
           Text(
             edu.degree,
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-            ),
+            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
           ),
           Text(
             edu.institution,
-            style: TextStyle(
-              fontSize: 9,
-              color: Colors.grey.shade600,
-            ),
+            style: TextStyle(fontSize: 9, color: Colors.grey.shade600),
           ),
         ],
       ),
     );
   }
 }
-

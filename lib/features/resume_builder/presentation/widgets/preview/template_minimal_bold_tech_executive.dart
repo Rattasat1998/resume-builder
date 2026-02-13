@@ -1,5 +1,6 @@
-import 'dart:io';
+// Avatar helper handles file/network images internally
 import 'package:flutter/material.dart';
+import '../../../../../core/utils/avatar_image_helper.dart';
 import '../../../domain/entities/resume_draft.dart';
 import '../../../domain/entities/resume_language.dart';
 import '../../../domain/entities/sections/skill.dart';
@@ -35,7 +36,9 @@ class TemplateMinimalPreview extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        draft.profile.fullName.isEmpty ? _strings.yourName : draft.profile.fullName,
+                        draft.profile.fullName.isEmpty
+                            ? _strings.yourName
+                            : draft.profile.fullName,
                         style: const TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.w200,
@@ -45,9 +48,14 @@ class TemplateMinimalPreview extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 0,
+                          vertical: 4,
+                        ),
                         child: Text(
-                          draft.profile.jobTitle.isEmpty ? _strings.jobTitle : draft.profile.jobTitle,
+                          draft.profile.jobTitle.isEmpty
+                              ? _strings.jobTitle
+                              : draft.profile.jobTitle,
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
@@ -81,7 +89,11 @@ class TemplateMinimalPreview extends StatelessWidget {
               height: 1,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.grey.shade400, Colors.grey.shade200, Colors.transparent],
+                  colors: [
+                    Colors.grey.shade400,
+                    Colors.grey.shade200,
+                    Colors.transparent,
+                  ],
                 ),
               ),
             ),
@@ -115,7 +127,9 @@ class TemplateMinimalPreview extends StatelessWidget {
                     children: [
                       _buildMinimalSectionTitle(_strings.workExperience),
                       const SizedBox(height: 16),
-                      ...draft.experiences.take(3).map((exp) => _buildMinimalExperience(exp)),
+                      ...draft.experiences
+                          .take(3)
+                          .map((exp) => _buildMinimalExperience(exp)),
                     ],
                   ),
                 ),
@@ -130,7 +144,9 @@ class TemplateMinimalPreview extends StatelessWidget {
                     children: [
                       _buildMinimalSectionTitle(_strings.education),
                       const SizedBox(height: 16),
-                      ...draft.educations.take(2).map((edu) => _buildMinimalEducation(edu)),
+                      ...draft.educations
+                          .take(2)
+                          .map((edu) => _buildMinimalEducation(edu)),
 
                       const SizedBox(height: 32),
 
@@ -139,19 +155,22 @@ class TemplateMinimalPreview extends StatelessWidget {
                       Wrap(
                         spacing: 0,
                         runSpacing: 8,
-                        children: draft.skills.take(6).map((skill) =>
-                          Padding(
-                            padding: const EdgeInsets.only(right: 16),
-                            child: Text(
-                              skill.name,
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.grey.shade600,
-                                letterSpacing: 0.5,
+                        children: draft.skills
+                            .take(6)
+                            .map(
+                              (skill) => Padding(
+                                padding: const EdgeInsets.only(right: 16),
+                                child: Text(
+                                  skill.name,
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.grey.shade600,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ).toList(),
+                            )
+                            .toList(),
                       ),
                     ],
                   ),
@@ -209,10 +228,7 @@ class TemplateMinimalPreview extends StatelessWidget {
             children: [
               Text(
                 exp.companyName,
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -227,10 +243,7 @@ class TemplateMinimalPreview extends StatelessWidget {
               ),
               Text(
                 exp.dateRange,
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.grey.shade400,
-                ),
+                style: TextStyle(fontSize: 10, color: Colors.grey.shade400),
               ),
             ],
           ),
@@ -260,18 +273,12 @@ class TemplateMinimalPreview extends StatelessWidget {
         children: [
           Text(
             edu.degree,
-            style: const TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
-            ),
+            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 2),
           Text(
             edu.institution,
-            style: TextStyle(
-              fontSize: 9,
-              color: Colors.grey.shade500,
-            ),
+            style: TextStyle(fontSize: 9, color: Colors.grey.shade500),
           ),
         ],
       ),
@@ -341,7 +348,10 @@ class TemplateBoldPreview extends StatelessWidget {
 
                 // Job title with accent background
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: _accentColor,
                     borderRadius: BorderRadius.circular(2),
@@ -389,11 +399,20 @@ class TemplateBoldPreview extends StatelessWidget {
                       runSpacing: 8,
                       children: [
                         if (draft.contact.email.isNotEmpty)
-                          _buildBoldContact(Icons.email_outlined, draft.contact.email),
+                          _buildBoldContact(
+                            Icons.email_outlined,
+                            draft.contact.email,
+                          ),
                         if (draft.contact.phone.isNotEmpty)
-                          _buildBoldContact(Icons.phone_outlined, draft.contact.phone),
+                          _buildBoldContact(
+                            Icons.phone_outlined,
+                            draft.contact.phone,
+                          ),
                         if (draft.contact.location.isNotEmpty)
-                          _buildBoldContact(Icons.location_on_outlined, draft.contact.location),
+                          _buildBoldContact(
+                            Icons.location_on_outlined,
+                            draft.contact.location,
+                          ),
                       ],
                     ),
 
@@ -414,9 +433,13 @@ class TemplateBoldPreview extends StatelessWidget {
 
                     // Experience
                     if (draft.experiences.isNotEmpty) ...[
-                      _buildBoldSectionHeader(_strings.workExperience.toUpperCase()),
+                      _buildBoldSectionHeader(
+                        _strings.workExperience.toUpperCase(),
+                      ),
                       const SizedBox(height: 20),
-                      ...draft.experiences.take(2).map((exp) => _buildBoldExperience(exp)),
+                      ...draft.experiences
+                          .take(2)
+                          .map((exp) => _buildBoldExperience(exp)),
                     ],
 
                     // Skills grid
@@ -427,22 +450,30 @@ class TemplateBoldPreview extends StatelessWidget {
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
-                        children: draft.skills.take(8).map((skill) => Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF0D0D0D),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            skill.name.toUpperCase(),
-                            style: const TextStyle(
-                              fontSize: 9,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                        )).toList(),
+                        children: draft.skills
+                            .take(8)
+                            .map(
+                              (skill) => Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF0D0D0D),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  skill.name.toUpperCase(),
+                                  style: const TextStyle(
+                                    fontSize: 9,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: 1,
+                                  ),
+                                ),
+                              ),
+                            )
+                            .toList(),
                       ),
                     ],
                   ],
@@ -461,13 +492,7 @@ class TemplateBoldPreview extends StatelessWidget {
       children: [
         Icon(icon, size: 14, color: Colors.grey.shade400),
         const SizedBox(width: 6),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 10,
-            color: Colors.grey.shade600,
-          ),
-        ),
+        Text(text, style: TextStyle(fontSize: 10, color: Colors.grey.shade600)),
       ],
     );
   }
@@ -513,11 +538,7 @@ class TemplateBoldPreview extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
               ),
-              Container(
-                width: 2,
-                height: 40,
-                color: Colors.grey.shade200,
-              ),
+              Container(width: 2, height: 40, color: Colors.grey.shade200),
             ],
           ),
           const SizedBox(width: 16),
@@ -536,10 +557,7 @@ class TemplateBoldPreview extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   '${exp.companyName}  •  ${exp.dateRange}',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey.shade500,
-                  ),
+                  style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
                 ),
               ],
             ),
@@ -579,11 +597,7 @@ class TemplateTechPreview extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF0F0F1A),
-            Color(0xFF1A1A2E),
-            Color(0xFF16213E),
-          ],
+          colors: [Color(0xFF0F0F1A), Color(0xFF1A1A2E), Color(0xFF16213E)],
         ),
       ),
       child: Column(
@@ -607,10 +621,15 @@ class TemplateTechPreview extends StatelessWidget {
               children: [
                 // Terminal bar
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.03),
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(12),
+                    ),
                   ),
                   child: Row(
                     children: [
@@ -639,8 +658,18 @@ class TemplateTechPreview extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildTerminalLine('const', 'developer', '= {'),
-                      _buildTerminalProperty('name', draft.profile.fullName.isEmpty ? 'Developer' : draft.profile.fullName),
-                      _buildTerminalProperty('role', draft.profile.jobTitle.isEmpty ? 'Software Engineer' : draft.profile.jobTitle),
+                      _buildTerminalProperty(
+                        'name',
+                        draft.profile.fullName.isEmpty
+                            ? 'Developer'
+                            : draft.profile.fullName,
+                      ),
+                      _buildTerminalProperty(
+                        'role',
+                        draft.profile.jobTitle.isEmpty
+                            ? 'Software Engineer'
+                            : draft.profile.jobTitle,
+                      ),
                       _buildTerminalProperty('email', draft.contact.email),
                       Text(
                         '};',
@@ -672,14 +701,18 @@ class TemplateTechPreview extends StatelessWidget {
                       children: [
                         // About
                         if (draft.profile.summary.isNotEmpty) ...[
-                          _buildTechSection('// ${_strings.aboutMe.toLowerCase()}.md'),
+                          _buildTechSection(
+                            '// ${_strings.aboutMe.toLowerCase()}.md',
+                          ),
                           const SizedBox(height: 12),
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
                               color: Colors.white.withValues(alpha: 0.03),
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.05),
+                              ),
                             ),
                             child: Text(
                               draft.profile.summary,
@@ -694,9 +727,13 @@ class TemplateTechPreview extends StatelessWidget {
                         ],
 
                         // Experience
-                        _buildTechSection('// ${_strings.workExperience.toLowerCase().replaceAll(' ', '_')}.json'),
+                        _buildTechSection(
+                          '// ${_strings.workExperience.toLowerCase().replaceAll(' ', '_')}.json',
+                        ),
                         const SizedBox(height: 12),
-                        ...draft.experiences.take(2).map((exp) => _buildTechExperience(exp)),
+                        ...draft.experiences
+                            .take(2)
+                            .map((exp) => _buildTechExperience(exp)),
                       ],
                     ),
                   ),
@@ -709,40 +746,56 @@ class TemplateTechPreview extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildTechSection('// ${_strings.skills.toLowerCase().replaceAll(' ', '-')}.yml'),
+                        _buildTechSection(
+                          '// ${_strings.skills.toLowerCase().replaceAll(' ', '-')}.yml',
+                        ),
                         const SizedBox(height: 12),
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.03),
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.05),
+                            ),
                           ),
                           child: Wrap(
                             spacing: 8,
                             runSpacing: 8,
-                            children: draft.skills.take(10).map((skill) => Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    _primaryColor.withValues(alpha: 0.2),
-                                    _primaryColor.withValues(alpha: 0.1),
-                                  ],
-                                ),
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: _primaryColor.withValues(alpha: 0.3)),
-                              ),
-                              child: Text(
-                                skill.name,
-                                style: TextStyle(
-                                  fontSize: 9,
-                                  color: _primaryColor,
-                                  fontFamily: 'monospace',
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            )).toList(),
+                            children: draft.skills
+                                .take(10)
+                                .map(
+                                  (skill) => Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 6,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          _primaryColor.withValues(alpha: 0.2),
+                                          _primaryColor.withValues(alpha: 0.1),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(
+                                        color: _primaryColor.withValues(
+                                          alpha: 0.3,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      skill.name,
+                                      style: TextStyle(
+                                        fontSize: 9,
+                                        color: _primaryColor,
+                                        fontFamily: 'monospace',
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
                           ),
                         ),
 
@@ -750,9 +803,13 @@ class TemplateTechPreview extends StatelessWidget {
 
                         // Education
                         if (draft.educations.isNotEmpty) ...[
-                          _buildTechSection('// ${_strings.education.toLowerCase()}.md'),
+                          _buildTechSection(
+                            '// ${_strings.education.toLowerCase()}.md',
+                          ),
                           const SizedBox(height: 12),
-                          ...draft.educations.take(2).map((edu) => _buildTechEducation(edu)),
+                          ...draft.educations
+                              .take(2)
+                              .map((edu) => _buildTechEducation(edu)),
                         ],
                       ],
                     ),
@@ -770,10 +827,7 @@ class TemplateTechPreview extends StatelessWidget {
     return Container(
       width: 12,
       height: 12,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
 
@@ -782,10 +836,25 @@ class TemplateTechPreview extends StatelessWidget {
       text: TextSpan(
         style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
         children: [
-          TextSpan(text: keyword, style: TextStyle(color: _primaryColor)),
-          const TextSpan(text: ' ', style: TextStyle(color: Colors.white)),
-          TextSpan(text: name, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          TextSpan(text: ' $bracket', style: TextStyle(color: Colors.grey.shade500)),
+          TextSpan(
+            text: keyword,
+            style: TextStyle(color: _primaryColor),
+          ),
+          const TextSpan(
+            text: ' ',
+            style: TextStyle(color: Colors.white),
+          ),
+          TextSpan(
+            text: name,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          TextSpan(
+            text: ' $bracket',
+            style: TextStyle(color: Colors.grey.shade500),
+          ),
         ],
       ),
     );
@@ -799,10 +868,22 @@ class TemplateTechPreview extends StatelessWidget {
         text: TextSpan(
           style: const TextStyle(fontFamily: 'monospace', fontSize: 11),
           children: [
-            TextSpan(text: key, style: TextStyle(color: Colors.grey.shade500)),
-            const TextSpan(text: ': ', style: TextStyle(color: Colors.white)),
-            TextSpan(text: '"$value"', style: TextStyle(color: _primaryColor.withValues(alpha: 0.8))),
-            const TextSpan(text: ',', style: TextStyle(color: Colors.grey)),
+            TextSpan(
+              text: key,
+              style: TextStyle(color: Colors.grey.shade500),
+            ),
+            const TextSpan(
+              text: ': ',
+              style: TextStyle(color: Colors.white),
+            ),
+            TextSpan(
+              text: '"$value"',
+              style: TextStyle(color: _primaryColor.withValues(alpha: 0.8)),
+            ),
+            const TextSpan(
+              text: ',',
+              style: TextStyle(color: Colors.grey),
+            ),
           ],
         ),
       ),
@@ -872,10 +953,7 @@ class TemplateTechPreview extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             exp.companyName,
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.grey.shade500,
-            ),
+            style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
           ),
         ],
       ),
@@ -903,10 +981,7 @@ class TemplateTechPreview extends StatelessWidget {
           ),
           Text(
             edu.institution,
-            style: TextStyle(
-              fontSize: 9,
-              color: Colors.grey.shade500,
-            ),
+            style: TextStyle(fontSize: 9, color: Colors.grey.shade500),
           ),
         ],
       ),
@@ -926,7 +1001,6 @@ class TemplateExecutivePreview extends StatelessWidget {
   });
 
   ResumeStrings get _strings => ResumeStrings(previewLanguage);
-
 
   Color get _primaryColor {
     try {
@@ -998,16 +1072,21 @@ class TemplateExecutivePreview extends StatelessWidget {
                               spreadRadius: 2,
                             ),
                           ],
-                          image: draft.profile.avatarUrl != null
-                              ? DecorationImage(
-                                  image: FileImage(File(draft.profile.avatarUrl!)),
-                                  fit: BoxFit.cover,
-                                )
-                              : null,
+                          image: AvatarImageHelper.getDecorationImage(
+                            draft.profile.avatarUrl,
+                          ),
                           color: Colors.white,
                         ),
-                        child: draft.profile.avatarUrl == null
-                            ? Icon(Icons.person, size: 40, color: _primaryColor.withValues(alpha: 0.5))
+                        child:
+                            AvatarImageHelper.getImageProvider(
+                                  draft.profile.avatarUrl,
+                                ) ==
+                                null
+                            ? Icon(
+                                Icons.person,
+                                size: 40,
+                                color: _primaryColor.withValues(alpha: 0.5),
+                              )
                             : null,
                       ),
                       const SizedBox(width: 24),
@@ -1017,7 +1096,9 @@ class TemplateExecutivePreview extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              draft.profile.fullName.isEmpty ? _strings.yourName : draft.profile.fullName,
+                              draft.profile.fullName.isEmpty
+                                  ? _strings.yourName
+                                  : draft.profile.fullName,
                               style: const TextStyle(
                                 fontSize: 26,
                                 fontWeight: FontWeight.w300,
@@ -1027,7 +1108,10 @@ class TemplateExecutivePreview extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 border: Border.all(color: _goldColor),
                                 borderRadius: BorderRadius.circular(2),
@@ -1066,7 +1150,10 @@ class TemplateExecutivePreview extends StatelessWidget {
                 if (draft.contact.phone.isNotEmpty)
                   _buildExecContact(Icons.phone_outlined, draft.contact.phone),
                 if (draft.contact.location.isNotEmpty)
-                  _buildExecContact(Icons.location_on_outlined, draft.contact.location),
+                  _buildExecContact(
+                    Icons.location_on_outlined,
+                    draft.contact.location,
+                  ),
               ],
             ),
           ),
@@ -1111,7 +1198,9 @@ class TemplateExecutivePreview extends StatelessWidget {
                   // Professional Experience
                   _buildExecSection(_strings.workExperience),
                   const SizedBox(height: 16),
-                  ...draft.experiences.take(2).map((exp) => _buildExecExperience(exp)),
+                  ...draft.experiences
+                      .take(2)
+                      .map((exp) => _buildExecExperience(exp)),
 
                   const SizedBox(height: 24),
 
@@ -1126,7 +1215,9 @@ class TemplateExecutivePreview extends StatelessWidget {
                           children: [
                             _buildExecSection(_strings.education),
                             const SizedBox(height: 16),
-                            ...draft.educations.take(2).map((edu) => _buildExecEducation(edu)),
+                            ...draft.educations
+                                .take(2)
+                                .map((edu) => _buildExecEducation(edu)),
                           ],
                         ),
                       ),
@@ -1143,30 +1234,45 @@ class TemplateExecutivePreview extends StatelessWidget {
                             Wrap(
                               spacing: 8,
                               runSpacing: 8,
-                              children: draft.skills.take(6).map((skill) => Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [_primaryColor, _primaryColor.withValues(alpha: 0.8)],
-                                  ),
-                                  borderRadius: BorderRadius.circular(4),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: _primaryColor.withValues(alpha: 0.3),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 2),
+                              children: draft.skills
+                                  .take(6)
+                                  .map(
+                                    (skill) => Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 14,
+                                        vertical: 8,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            _primaryColor,
+                                            _primaryColor.withValues(
+                                              alpha: 0.8,
+                                            ),
+                                          ],
+                                        ),
+                                        borderRadius: BorderRadius.circular(4),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: _primaryColor.withValues(
+                                              alpha: 0.3,
+                                            ),
+                                            blurRadius: 8,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Text(
+                                        skill.name,
+                                        style: const TextStyle(
+                                          fontSize: 9,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
                                     ),
-                                  ],
-                                ),
-                                child: Text(
-                                  skill.name,
-                                  style: const TextStyle(
-                                    fontSize: 9,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              )).toList(),
+                                  )
+                                  .toList(),
                             ),
                           ],
                         ),
@@ -1192,10 +1298,7 @@ class TemplateExecutivePreview extends StatelessWidget {
           const SizedBox(width: 8),
           Text(
             text,
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.grey.shade600,
-            ),
+            style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
           ),
         ],
       ),
@@ -1208,10 +1311,7 @@ class TemplateExecutivePreview extends StatelessWidget {
         Container(
           width: 8,
           height: 8,
-          decoration: BoxDecoration(
-            color: _goldColor,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: _goldColor, shape: BoxShape.circle),
         ),
         const SizedBox(width: 12),
         Text(
@@ -1224,12 +1324,7 @@ class TemplateExecutivePreview extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-        Expanded(
-          child: Container(
-            height: 1,
-            color: Colors.grey.shade300,
-          ),
-        ),
+        Expanded(child: Container(height: 1, color: Colors.grey.shade300)),
       ],
     );
   }
@@ -1268,10 +1363,7 @@ class TemplateExecutivePreview extends StatelessWidget {
               ),
               Text(
                 exp.dateRange,
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.grey.shade500,
-                ),
+                style: TextStyle(fontSize: 10, color: Colors.grey.shade500),
               ),
             ],
           ),
@@ -1332,10 +1424,7 @@ class TemplateExecutivePreview extends StatelessWidget {
                 ),
                 Text(
                   edu.institution,
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey.shade600,
-                  ),
+                  style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
                 ),
               ],
             ),

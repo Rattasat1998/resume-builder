@@ -1,12 +1,12 @@
-import 'dart:io';
+// Avatar helper handles file/network images internally
 
 import 'package:flutter/material.dart';
 
+import '../../../../../core/utils/avatar_image_helper.dart';
 import '../../../domain/entities/resume_draft.dart';
 import '../../../domain/entities/resume_language.dart';
 import '../../../domain/entities/sections/language.dart';
 import '../../../domain/entities/sections/skill.dart';
-
 
 /// Template B preview - Modern style with split layout
 class TemplateBPreview extends StatelessWidget {
@@ -81,15 +81,25 @@ class TemplateBPreview extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildModernSection(_strings.workExperience, Icons.work_outline),
+                            _buildModernSection(
+                              _strings.workExperience,
+                              Icons.work_outline,
+                            ),
                             const SizedBox(height: 16),
-                            ...draft.experiences.take(3).map((exp) => _buildModernExperience(exp)),
+                            ...draft.experiences
+                                .take(3)
+                                .map((exp) => _buildModernExperience(exp)),
 
                             const SizedBox(height: 24),
 
-                            _buildModernSection(_strings.education, Icons.school_outlined),
+                            _buildModernSection(
+                              _strings.education,
+                              Icons.school_outlined,
+                            ),
                             const SizedBox(height: 16),
-                            ...draft.educations.take(2).map((edu) => _buildModernEducation(edu)),
+                            ...draft.educations
+                                .take(2)
+                                .map((edu) => _buildModernEducation(edu)),
                           ],
                         ),
                       ),
@@ -102,27 +112,41 @@ class TemplateBPreview extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildModernSection(_strings.skills, Icons.psychology_outlined),
+                            _buildModernSection(
+                              _strings.skills,
+                              Icons.psychology_outlined,
+                            ),
                             const SizedBox(height: 16),
                             _buildSkillsGrid(),
 
                             if (draft.projects.isNotEmpty) ...[
                               const SizedBox(height: 24),
-                              _buildModernSection(_strings.projects, Icons.folder_outlined),
+                              _buildModernSection(
+                                _strings.projects,
+                                Icons.folder_outlined,
+                              ),
                               const SizedBox(height: 16),
-                              ...draft.projects.take(2).map((proj) => _buildModernProject(proj)),
+                              ...draft.projects
+                                  .take(2)
+                                  .map((proj) => _buildModernProject(proj)),
                             ],
 
                             if (draft.languages.isNotEmpty) ...[
                               const SizedBox(height: 24),
-                              _buildModernSection(_strings.languages, Icons.language),
+                              _buildModernSection(
+                                _strings.languages,
+                                Icons.language,
+                              ),
                               const SizedBox(height: 16),
                               _buildLanguagesSection(),
                             ],
 
                             if (draft.hobbies.isNotEmpty) ...[
                               const SizedBox(height: 24),
-                              _buildModernSection(_strings.interests, Icons.interests),
+                              _buildModernSection(
+                                _strings.interests,
+                                Icons.interests,
+                              ),
                               const SizedBox(height: 16),
                               _buildHobbiesSection(),
                             ],
@@ -193,7 +217,10 @@ class TemplateBPreview extends StatelessWidget {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 2),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.1),
+                  width: 2,
+                ),
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
@@ -219,15 +246,20 @@ class TemplateBPreview extends StatelessWidget {
                           offset: const Offset(0, 8),
                         ),
                       ],
-                      image: draft.profile.avatarUrl != null
-                          ? DecorationImage(
-                              image: FileImage(File(draft.profile.avatarUrl!)),
-                              fit: BoxFit.cover,
-                            )
-                          : null,
+                      image: AvatarImageHelper.getDecorationImage(
+                        draft.profile.avatarUrl,
+                      ),
                     ),
-                    child: draft.profile.avatarUrl == null
-                        ? Icon(Icons.person, size: 45, color: _primaryColor.withValues(alpha: 0.3))
+                    child:
+                        AvatarImageHelper.getImageProvider(
+                              draft.profile.avatarUrl,
+                            ) ==
+                            null
+                        ? Icon(
+                            Icons.person,
+                            size: 45,
+                            color: _primaryColor.withValues(alpha: 0.3),
+                          )
                         : null,
                   ),
                   const SizedBox(width: 24),
@@ -239,7 +271,9 @@ class TemplateBPreview extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          draft.profile.fullName.isEmpty ? _strings.yourName : draft.profile.fullName,
+                          draft.profile.fullName.isEmpty
+                              ? _strings.yourName
+                              : draft.profile.fullName,
                           style: const TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.w700,
@@ -249,13 +283,18 @@ class TemplateBPreview extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 6,
+                          ),
                           decoration: BoxDecoration(
                             color: _accentColor,
                             borderRadius: BorderRadius.circular(6),
                           ),
                           child: Text(
-                            draft.profile.jobTitle.isEmpty ? _strings.professionalTitle : draft.profile.jobTitle,
+                            draft.profile.jobTitle.isEmpty
+                                ? _strings.professionalTitle
+                                : draft.profile.jobTitle,
                             style: const TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
@@ -272,11 +311,20 @@ class TemplateBPreview extends StatelessWidget {
                           runSpacing: 8,
                           children: [
                             if (draft.contact.email.isNotEmpty)
-                              _buildHeaderContact(Icons.email_outlined, draft.contact.email),
+                              _buildHeaderContact(
+                                Icons.email_outlined,
+                                draft.contact.email,
+                              ),
                             if (draft.contact.phone.isNotEmpty)
-                              _buildHeaderContact(Icons.phone_outlined, draft.contact.phone),
+                              _buildHeaderContact(
+                                Icons.phone_outlined,
+                                draft.contact.phone,
+                              ),
                             if (draft.contact.location.isNotEmpty)
-                              _buildHeaderContact(Icons.location_on_outlined, draft.contact.location),
+                              _buildHeaderContact(
+                                Icons.location_on_outlined,
+                                draft.contact.location,
+                              ),
                           ],
                         ),
                       ],
@@ -354,9 +402,7 @@ class TemplateBPreview extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey.shade50,
         borderRadius: BorderRadius.circular(10),
-        border: Border(
-          left: BorderSide(color: _accentColor, width: 3),
-        ),
+        border: Border(left: BorderSide(color: _accentColor, width: 3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -449,10 +495,7 @@ class TemplateBPreview extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   '${edu.institution} • ${edu.dateRange}',
-                  style: TextStyle(
-                    fontSize: 9,
-                    color: Colors.grey.shade600,
-                  ),
+                  style: TextStyle(fontSize: 9, color: Colors.grey.shade600),
                 ),
               ],
             ),
@@ -477,9 +520,7 @@ class TemplateBPreview extends StatelessWidget {
               ],
             ),
             borderRadius: BorderRadius.circular(6),
-            border: Border.all(
-              color: _accentColor.withValues(alpha: 0.2),
-            ),
+            border: Border.all(color: _accentColor.withValues(alpha: 0.2)),
           ),
           child: Text(
             skill.name,
@@ -539,21 +580,29 @@ class TemplateBPreview extends StatelessWidget {
             Wrap(
               spacing: 4,
               runSpacing: 4,
-              children: project.technologies.take(3).map<Widget>((tech) => Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: _accentColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(3),
-                ),
-                child: Text(
-                  tech,
-                  style: TextStyle(
-                    fontSize: 7,
-                    color: _accentColor,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              )).toList(),
+              children: project.technologies
+                  .take(3)
+                  .map<Widget>(
+                    (tech) => Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: _accentColor.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                      child: Text(
+                        tech,
+                        style: TextStyle(
+                          fontSize: 7,
+                          color: _accentColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
             ),
           ],
         ],
@@ -620,10 +669,7 @@ class TemplateBPreview extends StatelessWidget {
           ),
           child: Text(
             hobby.name,
-            style: TextStyle(
-              fontSize: 9,
-              color: Colors.grey.shade700,
-            ),
+            style: TextStyle(fontSize: 9, color: Colors.grey.shade700),
           ),
         );
       }).toList(),

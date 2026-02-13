@@ -5,6 +5,7 @@ import '../../../../core/localization/app_language_cubit.dart';
 import '../../../auth/domain/entities/app_user.dart';
 import '../../../auth/presentation/bloc/auth_bloc.dart';
 import '../../../auth/presentation/bloc/auth_event.dart';
+import '../../../auth/presentation/bloc/auth_state.dart';
 import '../../../subscription/domain/entities/user_plan.dart';
 import '../../../subscription/presentation/bloc/subscription_bloc.dart';
 import '../../../subscription/presentation/bloc/subscription_event.dart';
@@ -30,10 +31,26 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
       await Future.delayed(const Duration(milliseconds: 500));
       if (!mounted) return;
 
+      // Check auth status first - don't show paywall if not authenticated
+      final authBloc = context.read<AuthBloc?>();
+      if (authBloc == null) return;
+
+      final authState = authBloc.state;
+
+      // Wait for auth check to complete (don't show if still loading)
+      if (authState.status == AuthStatus.initial) {
+        return;
+      }
+
+      // Don't show paywall if user is not logged in
+      if (!authState.isAuthenticated) {
+        return;
+      }
+
       final subscriptionBloc = context.read<SubscriptionBloc>();
       final state = subscriptionBloc.state;
 
-      // If we know the user is free, show paywall
+      // Only show paywall if user is authenticated AND is free tier
       if (state.status == SubscriptionStatus.loaded &&
           state.userPlan == UserPlan.free) {
         Navigator.of(context).pushNamed('/paywall');
@@ -116,7 +133,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
           ),
           centerTitle: true,
           actions: [
-            if (!isPremium)
+            if (!isPremium && isAuthenticated)
               IconButton(
                 onPressed: () => Navigator.of(context).pushNamed('/paywall'),
                 icon: const Icon(Icons.workspace_premium, color: Colors.amber),
@@ -143,6 +160,7 @@ class _MenuDashboardPageState extends State<MenuDashboardPage> {
     bool isPremium,
     SubscriptionState subState,
   ) {
+    print(user.avatarUrl ?? '');
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(

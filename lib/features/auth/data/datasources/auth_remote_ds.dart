@@ -297,8 +297,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       // TODO: Move these to a config file or environment variables
       // TODO: Replace with your Web Client ID (from Google Cloud Console)
       // NOTE: The 'AIza...' key is an API Key, NOT a Client ID. We need the one ending in .apps.googleusercontent.com
+      // const serverClientId ='267573453854-bk874vfd2oap3a133hvn3nall26sa16g.apps.googleusercontent.com';
       const serverClientId =
-          '267573453854-bk874vfd2oap3a133hvn3nall26sa16g.apps.googleusercontent.com';
+          '733638570019-1qb881j8o9mq0jnqdi5f3lf221s02c22.apps.googleusercontent.com';
 
       // On iOS, the Client ID is read from Info.plist (GIDClientID).
       // On Android without google-services.json, we rely on the plugin defaults or manual config.

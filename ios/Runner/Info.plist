@@ -45,7 +45,7 @@
 	<true/>
 	<key>GIDClientID</key>
 	<!-- TODO: Replace with your iOS Client ID from Google Cloud Console -->
-	<string>267573453854-kn48ikqn2o5hns3g0m188us4f5uv6kl4.apps.googleusercontent.com</string>
+	<string>733638570019-1qb881j8o9mq0jnqdi5f3lf221s02c22.apps.googleusercontent.com</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -53,7 +53,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.267573453854-kn48ikqn2o5hns3g0m188us4f5uv6kl4</string>
+				<string>com.googleusercontent.apps.733638570019-1qb881j8o9mq0jnqdi5f3lf221s02c22</string>
 			</array>
 		</dict>
 	</array>

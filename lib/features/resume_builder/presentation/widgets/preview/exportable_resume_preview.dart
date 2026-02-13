@@ -92,7 +92,6 @@ class ScaledResumePreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Calculate scale to fit in available space
         final scaleX = constraints.maxWidth / A4Size.width;
         final scaleY = constraints.maxHeight / A4Size.height;
         final scale = scaleX < scaleY ? scaleX : scaleY;

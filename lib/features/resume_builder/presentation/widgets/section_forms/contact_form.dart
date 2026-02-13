@@ -7,7 +7,6 @@ import '../../bloc/builder/builder_bloc.dart';
 import '../../bloc/builder/builder_event.dart';
 import '../../bloc/builder/builder_state.dart';
 
-
 /// Form for editing the contact section
 class ContactForm extends StatefulWidget {
   final Contact contact;
@@ -33,26 +32,23 @@ class _ContactFormState extends State<ContactForm> {
     super.initState();
     _emailController = TextEditingController(text: widget.contact.email);
     _phoneController = TextEditingController(text: widget.contact.phone);
-    _websiteController = TextEditingController(text: widget.contact.website ?? '');
-    _linkedInController = TextEditingController(text: widget.contact.linkedIn ?? '');
-    _githubController = TextEditingController(text: widget.contact.github ?? '');
+    _websiteController = TextEditingController(
+      text: widget.contact.website ?? '',
+    );
+    _linkedInController = TextEditingController(
+      text: widget.contact.linkedIn ?? '',
+    );
+    _githubController = TextEditingController(
+      text: widget.contact.github ?? '',
+    );
     _cityController = TextEditingController(text: widget.contact.city ?? '');
-    _countryController = TextEditingController(text: widget.contact.country ?? '');
+    _countryController = TextEditingController(
+      text: widget.contact.country ?? '',
+    );
   }
 
-  @override
-  void didUpdateWidget(ContactForm oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.contact != widget.contact) {
-      _emailController.text = widget.contact.email;
-      _phoneController.text = widget.contact.phone;
-      _websiteController.text = widget.contact.website ?? '';
-      _linkedInController.text = widget.contact.linkedIn ?? '';
-      _githubController.text = widget.contact.github ?? '';
-      _cityController.text = widget.contact.city ?? '';
-      _countryController.text = widget.contact.country ?? '';
-    }
-  }
+  // NOTE: Removed didUpdateWidget to prevent text from being overwritten while typing fast.
+  // The controllers receive initial values in initState, and onChanged syncs to BLoC.
 
   @override
   void dispose() {
@@ -70,11 +66,21 @@ class _ContactFormState extends State<ContactForm> {
     final updatedContact = widget.contact.copyWith(
       email: _emailController.text.trim(),
       phone: _phoneController.text.trim(),
-      website: _websiteController.text.trim().isEmpty ? null : _websiteController.text.trim(),
-      linkedIn: _linkedInController.text.trim().isEmpty ? null : _linkedInController.text.trim(),
-      github: _githubController.text.trim().isEmpty ? null : _githubController.text.trim(),
-      city: _cityController.text.trim().isEmpty ? null : _cityController.text.trim(),
-      country: _countryController.text.trim().isEmpty ? null : _countryController.text.trim(),
+      website: _websiteController.text.trim().isEmpty
+          ? null
+          : _websiteController.text.trim(),
+      linkedIn: _linkedInController.text.trim().isEmpty
+          ? null
+          : _linkedInController.text.trim(),
+      github: _githubController.text.trim().isEmpty
+          ? null
+          : _githubController.text.trim(),
+      city: _cityController.text.trim().isEmpty
+          ? null
+          : _cityController.text.trim(),
+      country: _countryController.text.trim().isEmpty
+          ? null
+          : _countryController.text.trim(),
     );
     context.read<BuilderBloc>().add(BuilderContactUpdated(updatedContact));
   }
@@ -89,7 +95,9 @@ class _ContactFormState extends State<ContactForm> {
         return false;
       },
       builder: (context, state) {
-        final lang = state is BuilderLoaded ? state.uiLanguage : ResumeLanguage.english;
+        final lang = state is BuilderLoaded
+            ? state.uiLanguage
+            : ResumeLanguage.english;
         final strings = ResumeStrings(lang);
 
         return Form(
@@ -111,7 +119,9 @@ class _ContactFormState extends State<ContactForm> {
                   if (value == null || value.trim().isEmpty) {
                     return strings.required;
                   }
-                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                  if (!RegExp(
+                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                  ).hasMatch(value)) {
                     return strings.required;
                   }
                   return null;
@@ -221,4 +231,3 @@ class _ContactFormState extends State<ContactForm> {
     );
   }
 }
-

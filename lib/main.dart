@@ -8,13 +8,11 @@ import 'features/dream_roadmap/presentation/pages/dream_job_roadmap_page.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
-import 'core/config/supabase_config.dart';
 import 'core/localization/app_language.dart';
 import 'core/localization/app_language_cubit.dart';
 import 'core/storage/key_value_store.dart';
-import 'features/auth/data/datasources/auth_remote_ds.dart';
+import 'features/auth/data/datasources/local_auth_ds.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
 import 'features/auth/domain/repositories/auth_repository.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
@@ -42,7 +40,7 @@ import 'features/resume_builder/presentation/bloc/preview/preview_cubit.dart';
 import 'features/resume_builder/presentation/pages/builder_shell_page.dart';
 import 'features/resume_builder/presentation/pages/preview_page.dart';
 import 'features/resume_builder/presentation/pages/templates_page.dart';
-import 'features/subscription/data/repositories/revenue_cat_repository_impl.dart';
+import 'features/subscription/data/repositories/local_subscription_repository.dart';
 import 'features/subscription/domain/repositories/subscription_repository.dart';
 import 'features/subscription/presentation/bloc/subscription_bloc.dart';
 import 'features/subscription/presentation/bloc/subscription_event.dart';
@@ -58,27 +56,20 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   final keyValueStore = SharedPreferencesStore(prefs);
 
-  // Initialize Supabase if configured
-  ResumeRemoteDataSource? remoteDataSource;
-  ImageStorageService? imageStorage;
-  AuthRepository? authRepository;
+  // Initialize Local Data Sources
+  // Supabase and Remote Data Sources are disabled for Offline Mode
+  ResumeRemoteDataSource? remoteDataSource; // null means no cloud sync
+  ImageStorageService? imageStorage; // null means local images only
 
-  if (SupabaseConfig.isConfigured) {
-    await Supabase.initialize(
-      url: SupabaseConfig.url,
-      anonKey: SupabaseConfig.anonKey,
-    );
-    final client = Supabase.instance.client;
-    remoteDataSource = ResumeRemoteDataSourceImpl(client);
-    imageStorage = ImageStorageService(client);
+  // Initialize Local Auth
+  final authRemoteDs = LocalAuthDataSourceImpl(keyValueStore);
+  final authRepository = AuthRepositoryImpl(authRemoteDs);
 
-    // Initialize Auth
-    final authRemoteDs = AuthRemoteDataSourceImpl(client);
-    authRepository = AuthRepositoryImpl(authRemoteDs);
-  }
+  // Initialize Local Auth (load cached user)
+  await authRemoteDs.init();
 
-  // Initialize Subscription
-  final subscriptionRepository = RevenueCatRepositoryImpl();
+  // Initialize Local Subscription (Mock/Store)
+  final subscriptionRepository = LocalSubscriptionRepositoryImpl();
   await subscriptionRepository.init();
 
   // Initialize data sources and repositories
@@ -286,7 +277,7 @@ class MyApp extends StatelessWidget {
     // For now, I'll pass it to MyApp.
     return BlocProvider(
       create: (context) => BuilderBloc(
-        createDraft: CreateDraft(repository, subscriptionRepository),
+        createDraft: CreateDraft(repository),
         loadDraft: LoadDraft(repository),
         autosaveDraft: AutosaveDraft(repository),
         updateProfile: UpdateProfile(repository),
@@ -298,7 +289,7 @@ class MyApp extends StatelessWidget {
         updateTemplate: UpdateTemplate(repository),
         removeItem: RemoveItem(repository),
         reorderItem: ReorderItem(repository),
-        exportPdf: ExportPdf(repository, subscriptionRepository, keyValueStore),
+        exportPdf: ExportPdf(repository),
       )..add(BuilderInitialized(draftId: draftId)),
       child: BuilderShellPage(draftId: draftId),
     );
