@@ -15,7 +15,7 @@ class CoverLetterPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.description_off, size: 64, color: Colors.grey),
+               Icon(Icons.description, size: 64, color: Colors.grey),
               const SizedBox(height: 16),
               const Text(
                 'AI Cover Letter Generation is unavailable in offline mode.',
